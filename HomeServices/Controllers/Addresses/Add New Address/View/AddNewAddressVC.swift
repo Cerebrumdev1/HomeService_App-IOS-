@@ -121,7 +121,7 @@ class AddNewAddressVC: CustomController,GMSMapViewDelegate,UITextFieldDelegate,U
         self.lat = "\(coordinate.latitude)"
         self.long = "\(coordinate.longitude)"
        
-        //atinderjit
+        //atinderjit SAHI
 //        self.getAddressFrom_LatLong(lat: "\(coordinate.latitude)", long: "\(coordinate.longitude)")
 //        { (adrs) in
 //
