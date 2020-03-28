@@ -34,8 +34,8 @@ class Navigation
         //HOME
         case HomeVC
         case EditProfileVC
-        
-       
+        case AddressListVC
+        case  AddNewAddressVC
         
         
         var obj: UIViewController?
@@ -72,10 +72,13 @@ class Navigation
                     return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "SettingVC")
                 
                 
-            //HOME
+            //HOME //AddNewAddressVC
             case .HomeVC:
                 return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "HomeVC")
-           
+           case .AddressListVC:
+                          return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddressListVC")
+             case .AddNewAddressVC:
+                      return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddNewAddressVC")
       
             }
         }

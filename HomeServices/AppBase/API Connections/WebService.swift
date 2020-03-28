@@ -121,6 +121,90 @@ class WebService
         }
     }
     
+    func PutApi(url : String, parameter : [String : Any],Target : UIViewController, completionResponse:@escaping (Any) -> (),completionnilResponse:  @escaping (String) -> Void)
+    {
+        if AllUtilies.isConnectedToInternet
+        {
+            view = Target
+            view!.StartIndicator(message: kLoading)
+            let urlComplete = url
+            print(urlComplete)
+            print("Your login parameter : \(parameter)")
+            
+            var headers = HTTPHeaders()
+            
+            if url.contains("login")
+            {
+                 headers    = ["Content-Type" : "application/json"]
+            }
+            else
+            {
+                 headers    = ["Content-Type" : "application/json","Authorization": AppDefaults.shared.userJWT_Token]
+            }
+            
+            
+            Alamofire.request(urlComplete, method: .put, parameters: parameter, encoding: JSONEncoding.default, headers : headers).responseJSON { response in
+                self.view!.StopIndicator()
+                switch response.result
+                {
+                case .success:
+                    print(response.value!)
+                    guard let data = response.value else{return}
+                    guard let responseData  = data as? [String : Any] else
+                    {
+                        return
+                    }
+                    guard let statusCode = responseData["code"] as? Int else
+                    {
+                        return
+                    }
+                    if statusCode == 200
+                    {
+                        print(responseData)
+                        completionResponse(response.result.value as Any)
+                    }
+                    else
+                    {
+                        guard let message = responseData["message"] as? String else {return}
+                        
+                        if  statusCode == 401
+                        {
+                            Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                        }
+                        else if statusCode == 403
+                        {
+                            Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                        }
+                        else if statusCode == 404
+                        {
+                            Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                        }
+                        else if statusCode == 204
+                        {
+                           // Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                            completionnilResponse(message)
+                        }
+                        else if statusCode == 500
+                        {
+                            Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                        }
+                        else
+                        {
+                            completionnilResponse(message)
+                        }
+                        
+                    }
+                    print(response.value as Any)
+                case .failure(let error):
+                    Target.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+                }
+            }
+        }
+        else
+        {
+            Target.showAlertMessage(titleStr: kAppName, messageStr: "Internet Error")
+        }
+    }
     
     
     func GetApi(url : String,Target : UIViewController,showLoader:Bool, completionResponse:@escaping (Any) -> (),completionnilResponse:  @escaping ((String)) -> Void)
@@ -209,7 +293,7 @@ class WebService
     }
     
     
-    func deleteApi(url : String,Target : UIViewController,showLoader:Bool, completionResponse:@escaping (Any) -> (),completionnilResponse:  @escaping ((String)) -> Void)
+    func deleteApi(url : String,parameter:[String:Any] ,Target : UIViewController,showLoader:Bool, completionResponse:@escaping (Any) -> (),completionnilResponse:  @escaping ((String)) -> Void)
     {
         if AllUtilies.isConnectedToInternet
         {

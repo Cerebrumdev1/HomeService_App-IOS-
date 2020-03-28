@@ -128,7 +128,10 @@ struct APIAddress
     static let GetProfile = BASE_URL + "profile/getprofile"
     static let MultipartAudioFileUpload = BASE_URL + "profile/updateprofile"
     static let LOGOUT = BASE_URL + "auth/logout"
-   
+    static let GET_ADDRESS = BASE_URL + "address/list"
+    static let UPDATE_ADDRESS = BASE_URL + "address/update" //DELETE_ADDRESS
+    static let DELETE_ADDRESS = BASE_URL + "address/delete"
+      static let ADD_ADDRESS = BASE_URL + "address/add"
 }
 
 let kHeader_app_json = ["Accept" : "application/json"]

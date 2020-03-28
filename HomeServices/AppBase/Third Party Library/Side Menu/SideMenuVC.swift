@@ -53,9 +53,9 @@ class SideMenuVC: BaseUIViewController,UIActionSheetDelegate
     //MARK:- Other functions
     func SetUI()
     {
-        sideMenu = ["Home","Profile","Notifications","Settings","Help", "Logout"]
+        sideMenu = ["Home","Profile","Addresses","Notifications","Settings","Help", "Logout"]
         
-        sideMenuImg  = ["home","profile2","notification","settings","help","logout"]
+        sideMenuImg  = ["home","profile2","address","notification","settings","help","logout"]
         
         tableViewMenu.dataSource = self
         tableViewMenu.delegate = self
@@ -119,47 +119,58 @@ extension SideMenuVC : UITableViewDelegate
     {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        switch indexPath.row
-        {
-        case 0:
-            let controller = Navigation.GetInstance(of: .HomeVC) as! HomeVC
-            let frontVC = revealViewController().frontViewController as? UINavigationController
-            frontVC?.pushViewController(controller, animated: false)
-            revealViewController().pushFrontViewController(frontVC, animated: true)
-            break
-        case 1:
-            let controller = Navigation.GetInstance(of: .EditProfileVC) as! EditProfileVC
-            let frontVC = revealViewController().frontViewController as? UINavigationController
-            frontVC?.pushViewController(controller, animated: false)
-            revealViewController().pushFrontViewController(frontVC, animated: true)
-            break
-        case 2:
-            let controller = Navigation.GetInstance(of: .NotificationVC) as! NotificationVC
-            let frontVC = revealViewController().frontViewController as? UINavigationController
-            frontVC?.pushViewController(controller, animated: false)
-            revealViewController().pushFrontViewController(frontVC, animated: true)
-            break
-            
-        case 3:
-            let controller = Navigation.GetInstance(of: .SettingVC) as! SettingVC
-            let frontVC = revealViewController().frontViewController as? UINavigationController
-            frontVC?.pushViewController(controller, animated: false)
-            revealViewController().pushFrontViewController(frontVC, animated: true)
-            break
-            
-        case 4:
-            
-            
-            break
-            
-        case 5:
-            self.logout_app()
-            break
-            
-            
-        default: break
-            
-        }
+        
+               switch indexPath.row
+               {
+               case 0:
+                   let controller = Navigation.GetInstance(of: .HomeVC) as! HomeVC
+                             let frontVC = revealViewController().frontViewController as? UINavigationController
+                             frontVC?.pushViewController(controller, animated: false)
+                             revealViewController().pushFrontViewController(frontVC, animated: true)
+                   
+                   break
+               case 1:
+                   let controller = Navigation.GetInstance(of: .EditProfileVC) as! EditProfileVC
+                   let frontVC = revealViewController().frontViewController as? UINavigationController
+                   frontVC?.pushViewController(controller, animated: false)
+                   revealViewController().pushFrontViewController(frontVC, animated: true)
+                   break
+                   
+                   case 2:
+                           let controller = Navigation.GetInstance(of: .AddressListVC) as! AddressListVC
+                           let frontVC = revealViewController().frontViewController as? UINavigationController
+                           frontVC?.pushViewController(controller, animated: false)
+                           revealViewController().pushFrontViewController(frontVC, animated: true)
+                           break
+                   
+               case 3:
+                   let controller = Navigation.GetInstance(of: .NotificationVC) as! NotificationVC
+                   let frontVC = revealViewController().frontViewController as? UINavigationController
+                   frontVC?.pushViewController(controller, animated: false)
+                   revealViewController().pushFrontViewController(frontVC, animated: true)
+                  
+                   
+                   break
+                   
+               case 4:
+                   
+                  
+                   break
+                   
+               case 5:
+                   
+                 
+                   break
+                   
+             case 6:
+                self.logout_app()
+             
+               break
+               
+                   
+               default: break
+                   
+               }
         
     }
     
