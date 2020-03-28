@@ -121,12 +121,12 @@ class AddNewAddressVC: CustomController,GMSMapViewDelegate,UITextFieldDelegate,U
         self.lat = "\(coordinate.latitude)"
         self.long = "\(coordinate.longitude)"
         
-        self.getAddressFrom_LatLong(lat: "\(coordinate.latitude)", long: "\(coordinate.longitude)")
-        { (adrs) in
-            
-            self.lblLocation.text = adrs as String
-            self.tfAddress.text = self.lblLocation.text
-        }
+//        self.getAddressFrom_LatLong(lat: "\(coordinate.latitude)", long: "\(coordinate.longitude)")
+//        { (adrs) in
+//
+//            self.lblLocation.text = adrs as String
+//            self.tfAddress.text = self.lblLocation.text
+//        }
     }
     
     //MARK:- HANDLING UI
