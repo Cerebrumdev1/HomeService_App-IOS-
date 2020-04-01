@@ -204,6 +204,10 @@ extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegat
 //MARK:- ViewDelegate
 extension AppointmentDetailVC  : AppointmentVCDelegate
 {
+    func didError(error: String) {
+        showAlertMessage(titleStr: kAppName, messageStr: error)
+    }
+    
     func getData(model: [AddressList_Result]) {
        if (model.count > 0)
         {

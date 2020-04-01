@@ -12,10 +12,12 @@ import Alamofire
 protocol AppointmentVCDelegate
 {
     func getData (model : [AddressList_Result])
+    func didError(error:String)
 }
 
 class Appontment_ViewModel
 {
+    typealias successHandler = (AppointmentModel) -> Void
     var delegate : AppointmentVCDelegate
     var view : UIViewController
     
@@ -68,4 +70,25 @@ class Appontment_ViewModel
           })
           
       }
+    
+    func getSchedule(selectedDay:String?,selectedId:String?,completion: @escaping successHandler)
+           {
+            WebService.Shared.GetApi(url: APIAddress.Get_Schedule + (selectedId ?? ""), Target: self.view, showLoader: true, completionResponse: { (response) in
+                     print(response)
+                           do
+                           {
+                               let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                               let getAllListResponse = try JSONDecoder().decode(AppointmentModel.self, from: jsonData)
+                               completion(getAllListResponse)
+                           }
+                           catch
+                           {
+                               print(error.localizedDescription)
+                               self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+                           }
+                           
+                       }, completionnilResponse: {(error) in
+                           self.delegate.didError(error: error)
+                       })
+           }
 }

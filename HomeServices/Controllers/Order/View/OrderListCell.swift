@@ -22,9 +22,10 @@ class OrderListCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
         viewStepper.addTarget(self, action: #selector(stepperValueChanged), for: .valueChanged)
-
     }
+    
 //MARK:- Other Functions
     @objc func stepperValueChanged(stepper: GMStepper) {
         print(stepper.value, terminator: "")

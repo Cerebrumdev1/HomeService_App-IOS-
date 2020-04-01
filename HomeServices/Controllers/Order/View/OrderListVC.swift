@@ -28,7 +28,6 @@ class OrderListVC: UIViewController {
     }
     
     //MARK:- Other functions
-    
     func setView(){
         tableViewOrder.delegate = self
         tableViewOrder.dataSource = self
