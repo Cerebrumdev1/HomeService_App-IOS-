@@ -13,17 +13,24 @@ class AppointmentDetailVC: CustomController {
     
     //MARK:- Outlet and Variables
     @IBOutlet weak var btnMorning: UIButton!
+    @IBOutlet weak var viewAddressBack: UIView!
     @IBOutlet weak var collectionViewCalender: UICollectionView!
     @IBOutlet weak var btnBack: UIBarButtonItem!
     @IBOutlet weak var viewStack: UIStackView!
     @IBOutlet weak var btnEvening: UIButton!
+    @IBOutlet weak var viewAddedAddress: CustomUIView!
+    @IBOutlet weak var lblAddress: UILabel!
     @IBOutlet weak var btnAfternoon: UIButton!
     @IBOutlet weak var btnNight: UIButton!
     @IBOutlet weak var viewHorizontalCalendar: HorizontalCalendarView!
     @IBOutlet weak var btnContinue: CustomButton!
     @IBOutlet weak var btnAddress: CustomButton!
+    @IBOutlet weak var tableViewAddress: UITableView!
+    @IBOutlet weak var viewTableBack: CustomUIView!
     
+    var viewModel:Appontment_ViewModel?
     var calendarArray : NSArray?
+    var apiDATA : [AddressList_Result]?
     
     //MARK:- life Cycle methods
     override func viewDidLoad() {
@@ -31,17 +38,29 @@ class AppointmentDetailVC: CustomController {
         setView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel?.getAddressList()
+    }
     //MARK:- Actions
     @IBAction func btnBackAction(_ sender: Any)
     {
         self.navigationController?.popViewController(animated: false)
     }
     
+    @IBAction func changeAddress(_ sender: Any) {
+        viewAddressBack.isHidden = false
+        viewTableBack.isHidden = false
+    }
     @IBAction func ContinueAction(_ sender: Any)
     {
+        let vc = UIStoryboard.init(name: kStoryBoard.order, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.OrderListVC) as! OrderListVC
+        self.navigationController?.pushViewController(vc,animated:false)
     }
     @IBAction func AddAddressAction(_ sender: Any)
     {
+        let controller = Navigation.GetInstance(of: .AddressListVC) as! AddressListVC
+        self.navigationController?.pushViewController(controller,animated:false)
     }
     @IBAction func selectDayPeriodAction(_ sender: Any)
     {
@@ -78,11 +97,20 @@ class AppointmentDetailVC: CustomController {
     // MARK:- Other functions
     func setView()
     {
+        self.viewModel = Appontment_ViewModel.init(Delegate: self, view: self)
         self.calendarArray = arrayOfDates()
         setBtnBorder(btn: btnMorning)
+        
         collectionViewCalender.delegate = self
         collectionViewCalender.dataSource = self
         collectionViewCalender.reloadData()
+        
+        tableViewAddress.delegate = self
+        tableViewAddress.dataSource = self
+        tableViewAddress.tableFooterView = UIView()
+        tableViewAddress.layer.cornerRadius = 8
+        tableViewAddress.clipsToBounds = true
+       
     }
     
     //MARK:- GetMonthList
@@ -105,7 +133,7 @@ class AppointmentDetailVC: CustomController {
     }
 }
 
-//MARK:- Coolection View Delegate and DataSource
+//MARK:- Collection View Delegate and DataSource
 extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout
 {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -122,7 +150,7 @@ extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegat
             //MonthFormateWithDay
             let dateFormatterMonth = DateFormatter()
             dateFormatterMonth.dateFormat = "MMM d"
-         
+            
             let dateCalender = self.calendarArray?[indexPath.row] as? String
             
             if let date = dateCalender?.components(separatedBy: " ").first {
@@ -171,4 +199,54 @@ extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 115.0, height: 60.0)
     }
+}
+
+//MARK:- ViewDelegate
+extension AppointmentDetailVC  : AppointmentVCDelegate
+{
+    func getData(model: [AddressList_Result]) {
+       if (model.count > 0)
+        {
+            btnAddress.isHidden = true
+            viewAddedAddress.isHidden = false
+            self.apiDATA = model
+            self.tableViewAddress.reloadData()
+            lblAddress.text =  apiDATA?[0].addressName
+            
+        }
+        else
+        {
+         btnAddress.isHidden = false
+         viewAddedAddress.isHidden = true
+        }
+    }
+    
+    
+}
+
+//MARK:- TableView DelegateAnd DataSource
+extension AppointmentDetailVC : UITableViewDelegate,UITableViewDataSource
+{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return apiDATA?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: AppointmentDetailIdentifiers.AddressTableCell, for: indexPath) as? AddressTableCell
+        {
+            cell.lblAddress.text = apiDATA?[indexPath.row].addressName
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        tableView.deselectRow(at: indexPath, animated: true)
+        lblAddress.text =  apiDATA?[indexPath.row].addressName
+        viewAddressBack.isHidden = true
+        viewTableBack.isHidden = true
+}
 }

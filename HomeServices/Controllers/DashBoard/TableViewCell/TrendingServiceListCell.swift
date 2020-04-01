@@ -71,8 +71,16 @@ extension TrendingServiceListCell:UICollectionViewDataSource,UICollectionViewDel
 
    // UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 233.0, height: 180.0)
+        
+        let noOfCellsInRow = 2  //number of column you want
+               let flowLayout = collectionViewLayout as! UICollectionViewFlowLayout
+               let totalSpace = flowLayout.sectionInset.left
+                   + flowLayout.sectionInset.right
+                   + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
+               let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
+               return CGSize(width: size, height: 112)
+       //return CGSize(width: 233.0, height: 120.0)
     }
 
-  
+   
 }

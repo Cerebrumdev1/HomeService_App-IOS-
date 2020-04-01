@@ -19,6 +19,7 @@ struct SubCategoriesModel : Codable {
 struct BodyList: Codable {
     let name, bodyDescription, price: String?
     let icon, thumbnail: String?
+    let id :String?
     let category: Category?
     let serviceType: ServiceType?
     let rating: Int?

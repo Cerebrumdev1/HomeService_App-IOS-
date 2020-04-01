@@ -142,15 +142,15 @@ extension NSObject {
     
     
     func setRootView(_ identifier:String,storyBoard:String)
-    {
-        let Storyboard: UIStoryboard = UIStoryboard(name:storyBoard, bundle: nil)
-        let chooseCVC = Storyboard.instantiateViewController(withIdentifier: identifier)
-        
-        let navigationController = UINavigationController(rootViewController: chooseCVC)
-        UIApplication.shared.windows.first?.rootViewController = navigationController
-        navigationController.navigationBar.isHidden = true
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
-    }
+       {
+           let Storyboard: UIStoryboard = UIStoryboard(name:storyBoard, bundle: nil)
+           let chooseCVC = Storyboard.instantiateViewController(withIdentifier: identifier)
+           
+           let navigationController = UINavigationController(rootViewController: chooseCVC)
+           UIApplication.shared.windows.first?.rootViewController = navigationController
+           navigationController.navigationBar.isHidden = true
+           UIApplication.shared.windows.first?.makeKeyAndVisible()
+       }
     
     
     func CreateActivityIndicatorWithView(view:UIView) -> UIActivityIndicatorView

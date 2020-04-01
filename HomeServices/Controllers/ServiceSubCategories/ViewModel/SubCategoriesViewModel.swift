@@ -17,7 +17,9 @@ protocol SubCategoriesDelegate:class
 
 class SubCategoriesViewModel
 {
+    //MARK:- Variables
     typealias successHandler = (SubCategoriesModel) -> Void
+    typealias successDetailHandler = (ServiceDetailModel) -> Void
     var delegate : SubCategoriesDelegate
     var view : UIViewController
     
@@ -48,6 +50,30 @@ class SubCategoriesViewModel
                         self.delegate.didError(error: error)
                     })
         }
+    
+    //MARK:- GetSERVICE DETAIL
+    
+    func getServiceDetailApi(ServiceId:String?,completion: @escaping successDetailHandler)
+          {
+              WebService.Shared.GetApi(url: HomeServiceApi.BASE_URL + HomeServiceApi.getServiceDeatil + (ServiceId ?? "") , Target: self.view, showLoader: true, completionResponse: { (response) in
+                    print(response)
+                          do
+                          {
+                              let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                              let getAllListResponse = try JSONDecoder().decode(ServiceDetailModel.self, from: jsonData)
+                              completion(getAllListResponse)
+                          }
+                          catch
+                          {
+                              print(error.localizedDescription)
+                              self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+                          }
+                          
+                      }, completionnilResponse: {(error) in
+                          self.delegate.didError(error: error)
+                      })
+          }
+      
 
     func jsonToString(json: [String:Any]) -> String
     {

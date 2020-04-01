@@ -70,7 +70,7 @@ class SubCategoriesListVC: UIViewController {
                 if let categoriesList = responce.body
                 {
                     if (categoriesList.count > 0){
-                        self.viewRating.rating = Double(categoriesList[0].rating!)
+                        self.viewRating.rating = Double(categoriesList[0].rating ?? 0 )
                         if let url = categoriesList[0].thumbnail
                         {
                             self.imageViewBanner.setImage(with: url, placeholder: KImages.KDefaultIcon)
@@ -110,7 +110,9 @@ extension SubCategoriesListVC : UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: true)
-        let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
+
+        let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
+        vc.selectedId = subCategoriesList[indexPath.row].id
         self.navigationController?.pushViewController(vc,animated:false)
     }
 }

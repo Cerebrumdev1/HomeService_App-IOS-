@@ -44,7 +44,7 @@ class AddressList_ViewModel
             
         }, completionnilResponse: {(error) in
             self.handle_emptyTable()
-            self.view.showAlertMessage(titleStr: kAppName, messageStr: error)
+           // self.view.showAlertMessage(titleStr: kAppName, messageStr: error)
         })
         
     }

@@ -269,7 +269,8 @@ class WebService
                             }
                             else if statusCode == 204
                             {
-                                Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                               // Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                                completionnilResponse(message)
                             }
                             else if statusCode == 500
                             {

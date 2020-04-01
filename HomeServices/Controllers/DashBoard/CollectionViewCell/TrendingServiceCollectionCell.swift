@@ -18,8 +18,8 @@ class TrendingServiceCollectionCell: UICollectionViewCell {
     
     //MARK:- other Functions
     func setView(data:TrendingService){
-        self.viewBack.layer.cornerRadius = 10
-        self.viewBack.layer.masksToBounds = true
+//        self.viewBack.layer.cornerRadius = 10
+//        self.viewBack.layer.masksToBounds = true
         self.viewBack.layer.borderWidth = 0.5
         self.viewBack.layer.borderColor = UIColor.init(netHex: 0xD9D4D4).cgColor
         

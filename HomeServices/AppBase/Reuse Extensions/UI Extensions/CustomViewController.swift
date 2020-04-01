@@ -13,6 +13,9 @@ import AVFoundation
 import Photos
 import MobileCoreServices
 import NVActivityIndicatorView
+import CoreLocation
+import GoogleMaps
+import GooglePlaces
 
 //MARK:- UI Picker Delegate
 
@@ -72,6 +75,18 @@ class CustomController: UIViewController
         
     }
     
+    //MARK :- ADDSdadowToView
+    func addShadowToView(radius:CGFloat,view:UIView)
+    {
+    view.layer.cornerRadius = radius
+    view.layer.shadowColor = UIColor.lightGray.cgColor
+    view.layer.shadowOffset = CGSize(width: 6, height: 6)
+    view.layer.shadowRadius = 8
+    view.layer.shadowOpacity = 0.4
+    view.layer.masksToBounds = false
+    view.clipsToBounds = false
+    }
+    
     func addShadowNavColor()
     {
         
@@ -113,7 +128,53 @@ class CustomController: UIViewController
         view.layer.masksToBounds = true
         view.clipsToBounds = true
     }
-    
+    //MARK:- GetAddress
+    func getAddressFrom_LatLong(lat:String,long:String, completion: @escaping (_ result: NSString) -> Void)
+       {
+               var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
+               let lat: Double = Double("\(lat)")!
+               //21.228124
+               let lon: Double = Double("\(long)")!
+               //72.833770
+               center.latitude = lat
+               center.longitude = lon
+               
+               let geoCoder = GMSGeocoder()
+               geoCoder.reverseGeocodeCoordinate(center) { (response, error) in
+                   if error != nil
+                   {
+                       print(error!.localizedDescription)
+                       completion("error")
+                       return
+                   }
+                   
+                   if let address = response?.firstResult()
+                   {
+                       var string = ""
+                       let array: [String?] = [address.thoroughfare, address.locality, address.subLocality, address.administrativeArea, address.postalCode, address.country]
+                       let haveValue: [Int] = [(address.thoroughfare != "" && address.thoroughfare != nil) ? 0 : -1, (address.locality != "" && address.locality != nil) ? 1 : -1, (address.subLocality != "" && address.subLocality != nil) ? 2 : -1, (address.administrativeArea != "" && address.administrativeArea != nil) ? 3 : -1, (address.postalCode != "" && address.postalCode != nil) ? 4 : -1, (address.country != "" && address.country != nil) ? 5 : -1]
+                       var isFirstValue = true
+                       for value in haveValue
+                       {
+                           if value >= 0
+                           {
+                               if isFirstValue
+                               {
+                                   string += array[value]!
+                                   isFirstValue = false
+                               }
+                               else
+                               {
+                                   string += ", " + array[value]!
+                               }
+                           }
+                       }
+                       
+                       completion(string as NSString)
+                   }
+                   
+               }
+       }
     func UIPickerDataSurce(txtFld: UITextField, delegate : UIPickerDelegate,count:Int)
     {
         self.delegate = delegate

@@ -29,7 +29,7 @@ let KNo                                         =       "No"
 let KOngoing                                         =       "Ongoing"
 let KCompleted                                         =       "Completed"
 
-
+let GoogleAPIKey = "AIzaSyC9XlPw-l_lY4ga__R5daHFQ8Aj4c8gqOU"
 
 //MARK:- iDevice detection code
 struct Device_type
@@ -131,7 +131,8 @@ struct APIAddress
     static let GET_ADDRESS = BASE_URL + "address/list"
     static let UPDATE_ADDRESS = BASE_URL + "address/update" //DELETE_ADDRESS
     static let DELETE_ADDRESS = BASE_URL + "address/delete"
-      static let ADD_ADDRESS = BASE_URL + "address/add"
+    static let ADD_ADDRESS = BASE_URL + "address/add"
+    static let Get_Schedule = BASE_URL + "schedule/getSchedule?serviceId="
 }
 
 let kHeader_app_json = ["Accept" : "application/json"]
@@ -294,6 +295,7 @@ struct HomeServiceApi
     static let BASE_URL = "http://camonher.infinitywebtechnologies.com:9066/api/mobile/services/"//"http://camonher.infinitywebtechnologies.com:9065/api/"
     static let getServiceCategories = "getCategories"
     static let getSubCategoriesList = "getServices/"
+    static let getServiceDeatil = "detail?serviceId="
     static let REGISTER = BASE_URL + "register"
     static let LOGIN = BASE_URL + "login"
     
@@ -317,6 +319,7 @@ struct kStoryBoard
 {
     static let Home = "Home"
     static let appointment = "Appointment"
+    static let order = "Order"
 }
 //MARK:- VIEW IDENTIFIERS
 
@@ -330,12 +333,17 @@ struct HomeIdentifiers {
     static let TrendingServiceCollectionCell = "TrendingServiceCollectionCell"
     static let ServiceHelpCollectionCell = "ServiceHelpCollectionCell"
     static let SubCategoriesListCell = "SubCategoriesListCell"
+    static let CategoriesDetailVC = "CategoriesDetailVC"
+    static let IncludedServicesCell = "IncludedServicesCell"
+    static let OrderListVC = "OrderListVC"
+    static let OrderListCell = "OrderListCell"
 }
 
 struct AppointmentDetailIdentifiers
 {
     static let AppointmentDetailVC = "AppointmentDetailVC"
     static let AppCalenderCollectionCell = "AppCalenderCollectionCell"
+    static let AddressTableCell = "AddressTableCell"
 }
 
 

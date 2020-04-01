@@ -18,6 +18,7 @@ protocol ServicesDetailDelegate:class
 class HomeVC: UIViewController {
     
     //MARK:- Outlet and Variables
+    @IBOutlet weak var lblNoBanner: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var viewSearch: UIView!
     @IBOutlet weak var viewNewTab: UIView!
@@ -162,8 +163,19 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource
         case 0:
             if let cell = tableView.dequeueReusableCell(withIdentifier: HomeIdentifiers.ShowAdvertismentCell, for: indexPath) as? ShowAdvertismentCell
             {
-                cell.bannerList = self.bannersList
-                cell.collectionView.reloadData()
+                
+                if self.bannersList.count > 0
+                {
+                    lblNoBanner.isHidden = true
+                    cell.bannerList = self.bannersList
+                    cell.collectionView.isHidden = false
+                    cell.collectionView.reloadData()
+                }else
+                {
+                    cell.collectionView.isHidden = true
+                    lblNoBanner.isHidden = false
+                }
+                
                 return cell
             }
             break
@@ -217,8 +229,9 @@ extension HomeVC : ServicesDetailDelegate
 {
     //MARK:- DetailOFTrendingServices
     func trendingServicesDetail(index: Int?) {
-        //        let vc = UIStoryboard.init(name: "Home", bundle: nil).instantiateViewController(withIdentifier: "ServiceDetailVC") as! ServiceDetailVC
-        //        self.navigationController?.pushViewController(vc,animated:false)
+        let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
+        vc.selectedId = self.trendingServicesList[index ?? 0].id!
+        self.navigationController?.pushViewController(vc,animated:false)
     }
     
     //MARK:- DetailOFOtherServices

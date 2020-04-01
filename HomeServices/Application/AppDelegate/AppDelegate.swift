@@ -8,6 +8,11 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
+import GoogleMaps
+import Alamofire
+import GooglePlaces
+import GooglePlaces
 
 @available(iOS 13.0, *)
 @UIApplicationMain
@@ -17,6 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        GMSServices.provideAPIKey(GoogleAPIKey)
+        GoogleApi.shared.initialiseWithKey(GoogleAPIKey)
+        GMSPlacesClient.provideAPIKey(GoogleAPIKey)
+        registerForPushNotifications()
+        set_nav_bar_color()
+       
         FirebaseApp.configure()
         AllUtilies.CameraGallaryPrmission()
         setRootViewController()
@@ -37,7 +49,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
+    func registerForPushNotifications()
+     {
+         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+             (granted, error) in
+             print("Permission granted: \(granted)")
+             guard granted else { return }
+             self.getNotificationSettings()
+         }
+    }
+     
+        func getNotificationSettings()
+        {
+            UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+                print("Notification settings: \(settings)")
+            }
+        }
+        
+        func set_nav_bar_color()
+           {
+               UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarPosition.any, barMetrics: UIBarMetrics.default)
+               UINavigationBar.appearance().shadowImage = UIImage()
+               UINavigationBar.appearance().tintColor = UIColor.black
+               UINavigationBar.appearance().barTintColor = AppButtonColor.kOrangeColor
+               UINavigationBar.appearance().isTranslucent = false
+               UINavigationBar.appearance().clipsToBounds = false
+            UINavigationBar.appearance().backgroundColor = AppButtonColor.kOrangeColor
+               UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font : (UIFont(name: "Helvetica Neue", size: 20))!, NSAttributedString.Key.foregroundColor: UIColor.black]
+               
+           }
     func setRootViewController()
      {
          if AppDefaults.shared.userID == ""
