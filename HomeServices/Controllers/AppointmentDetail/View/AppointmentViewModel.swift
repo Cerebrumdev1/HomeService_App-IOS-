@@ -13,6 +13,8 @@ protocol AppointmentVCDelegate
 {
     func getData (model : [AddressList_Result])
     func didError(error:String)
+    func Show_results(msg: String)
+    func addCarSuccess(msg:String)
 }
 
 class Appontment_ViewModel
@@ -140,7 +142,56 @@ class Appontment_ViewModel
             self.delegate.didError(error: error)
         })
     }
+    //MARK:- Validations
+    func addToCartValidation(param:AddtoCartInputModel?,serviceDay:String?,serviceTime:String?)
+    {
+        guard let addressId = param?.addressId,  !addressId.isEmpty, !addressId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+        {
+            delegate.Show_results(msg: alertMessages.selectAddress)
+            return
+        }
+        guard let service_Day = serviceDay,!service_Day.isEmpty, !service_Day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+        {
+            delegate.Show_results(msg: alertMessages.selectDay)
+            return
+        }
+        guard let service_Time = serviceTime,!service_Time.isEmpty, !service_Time.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+        {
+            delegate.Show_results(msg:alertMessages.selectTime)
+            return
+        }
+        
+        addToCartApi(param: param, completion: { (responce) in
+            print(responce)
+            self.delegate.addCarSuccess(msg:  responce.message ?? "")
+        })
+    }
     
+    //updateCart
+    
+    func updateToCartValidation(param:AddtoCartInputModel?,serviceDay:String?,serviceTime:String?,cartId:String?)
+       {
+           guard let addressId = param?.addressId,  !addressId.isEmpty, !addressId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+           {
+               delegate.Show_results(msg: alertMessages.selectAddress)
+               return
+           }
+           guard let service_Day = serviceDay,!service_Day.isEmpty, !service_Day.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+           {
+               delegate.Show_results(msg: alertMessages.selectDay)
+               return
+           }
+           guard let service_Time = serviceTime,!service_Time.isEmpty, !service_Time.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else
+           {
+               delegate.Show_results(msg:alertMessages.selectTime)
+               return
+           }
+           
+           upDateCartApi(param: param, cartId: cartId, completion: { (responce) in
+               print(responce)
+               self.delegate.addCarSuccess(msg:  responce.message ?? "")
+           })
+       }
     //MARK:- GetScheduleJSON
     private func GetScheduleJSON(data: [String : Any],completionResponse:  @escaping (AppointmentModel) -> Void,completionError: @escaping (String?) -> Void)
     {

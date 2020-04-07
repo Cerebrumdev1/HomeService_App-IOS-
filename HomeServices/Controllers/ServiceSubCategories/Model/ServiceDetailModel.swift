@@ -19,8 +19,10 @@ struct BodyDetail: Codable {
     let id :String?
     let name, description, price: String?
     let icon, thumbnail: String?
-    let serviceType: ServiceType1?
+    //let serviceType: ServiceType1?
     let rating: Int?
+    let type, duration, turnaroundTime: String?
+    let includedServices, excludedServices: [String]?
     let category: Category?
 
 }

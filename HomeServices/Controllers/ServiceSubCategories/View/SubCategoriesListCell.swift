@@ -35,13 +35,13 @@ class SubCategoriesListCell: UITableViewCell {
         
         //setData
         lblServiceName.text = categoriesList.name
-        lblRate.text = "$ " + (categoriesList.serviceType?.price ?? "")
+        lblRate.text = "$ " + (categoriesList.price ?? "")
         if let url = categoriesList.thumbnail
         {
           self.imageViewService.setImage(with: url, placeholder: "image")
         }
-        btnRepair.setTitle(categoriesList.serviceType?.name ?? "Repair", for: .normal)
-        lblPerPrice.text = "/" + (categoriesList.serviceType?.type ?? "")
+        btnRepair.setTitle(categoriesList.name ?? "Repair", for: .normal)
+        lblPerPrice.text = "/" + (categoriesList.type ?? "")
     
     }
     

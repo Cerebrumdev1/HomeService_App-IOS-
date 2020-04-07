@@ -21,8 +21,10 @@ struct BodyList: Codable {
     let icon, thumbnail: String?
     let id :String?
     let category: Category?
-    let serviceType: ServiceType?
+    //let serviceType: ServiceType?
     let rating: Int?
+    let includedServices, excludedServices: [String]?
+    let type, duration, turnaroundTime: String?
 }
 
 // MARK: - Category

@@ -18,13 +18,20 @@ protocol CartListDelegate:class
 class OrderListVC: UIViewController {
     
     //MARK:- Outlet and Variables
+    @IBOutlet weak var kOldlPriceWidth: NSLayoutConstraint!
     @IBOutlet weak var tableViewOrder: UITableView!
+    @IBOutlet weak var imageArrow: UIImageView!
+    @IBOutlet weak var lblOldPrice: UILabel!
+    @IBOutlet weak var kRemoveButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var btnApplyCoupon: UIButton!
     @IBOutlet weak var lblItemCount: UILabel!
     @IBOutlet weak var lblTotalPrice: UILabel!
     @IBOutlet weak var lblPrice: UILabel!
     @IBOutlet weak var btnCheckOut: CustomButton!
     @IBOutlet weak var lblNoRecord: UILabel!
     @IBOutlet weak var btnAddMoreService: CustomButton!
+    @IBOutlet weak var lblApplyCoupon: UILabel!
+    @IBOutlet weak var kLblApplyCouponWdith: NSLayoutConstraint!
     
     var viewModel : OrderViewModel?
     var cartList = [CartListingModel.Datum]()
@@ -39,6 +46,9 @@ class OrderListVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        addCoupon_Animation()
+        
     }
     
     //MARK:- Other functions
@@ -59,8 +69,42 @@ class OrderListVC: UIViewController {
         //setColor
         btnAddMoreService.backgroundColor = Appcolor.kTheme_Color
         btnCheckOut.backgroundColor = Appcolor.kTheme_Color
-        
+        self.kLblApplyCouponWdith.constant = 0
+        self.kOldlPriceWidth.constant = 0
         getCartList()
+    }
+    
+    //MARK:- AddCoupon_Animation
+    
+    func addCoupon_Animation()
+    {
+        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseOut, animations: {
+            //  self.lblApplyCoupon.frame = CGRect(x:  80, y: 123, width: 160, height: 12)
+            self.kLblApplyCouponWdith.constant = 200
+            self.kOldlPriceWidth.constant = 50
+            self.kRemoveButtonWidth.constant = 65
+            self.imageArrow.isHidden = true
+            self.btnApplyCoupon.isUserInteractionEnabled = false
+            self.lblApplyCoupon.text =  "Coupon Applied: (New)"
+            
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    //MARK:- RemoveCoupon_Animation
+    
+    func removeCoupon_Animation()
+    {
+        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseIn, animations: {
+                   //  self.lblApplyCoupon.frame = CGRect(x:  80, y: 123, width: 160, height: 12)
+                   self.kLblApplyCouponWdith.constant = 100
+                   self.kOldlPriceWidth.constant = 0
+                   self.kRemoveButtonWidth.constant = 0
+                   self.imageArrow.isHidden = false
+                   self.lblApplyCoupon.text =  "Apply Coupon"
+                   self.btnApplyCoupon.isUserInteractionEnabled = true
+                   self.view.layoutIfNeeded()
+               }, completion: nil)
     }
     
     //MARK:- HitApi
@@ -80,6 +124,12 @@ class OrderListVC: UIViewController {
                     self.lblItemCount.text = "Items ( \(responce.body?.totalQunatity ?? 0) )"
                     self.lblPrice.text = "$ \(responce.body?.sum ?? 0)"
                     self.lblTotalPrice.text = "$ \(responce.body?.sum ?? 0)"
+                    
+                   // self.lblOldPrice.text = "$ \(responce.body?.sum ?? 0)"
+                    let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "$ \(responce.body?.sum ?? 0)")
+                    attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+                    
+                    self.lblOldPrice.attributedText = attributeString
                 }
                 else{
                     self.lblNoRecord.isHidden = false
@@ -92,6 +142,9 @@ class OrderListVC: UIViewController {
     
     
     //MARK:- Actions
+    @IBAction func removePromoCodeAction(_ sender: Any) {
+        removeCoupon_Animation()
+    }
     @IBAction func applyCouponAction(_ sender: Any)
     {
         let controller = Navigation.GetInstance(of: .ApplyPromoCodeVC) as! ApplyPromoCodeVC
@@ -141,26 +194,26 @@ class OrderListVC: UIViewController {
     }
     //MARK:- DeleteRow
     func deleteCellROW()
-       {
-           let indxpth = IndexPath(row: self.row, section: 0)
+    {
+        let indxpth = IndexPath(row: self.row, section: 0)
         cartList.remove(at: self.row)
-           self.tableViewOrder.deleteRows(at: [indxpth], with: .fade)
-           DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)
-           {
+        self.tableViewOrder.deleteRows(at: [indxpth], with: .fade)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0)
+        {
             if (self.cartList.count == 0)
-               {
-                  self.tableViewOrder.isHidden = true
-                  self.lblNoRecord.isHidden = false
-               }
+            {
+                self.tableViewOrder.isHidden = true
+                self.lblNoRecord.isHidden = false
+            }
             else{
                 self.tableViewOrder.isHidden = false
                 self.lblNoRecord.isHidden = true
             }
-               self.tableViewOrder.reloadData()
-           }
-           
-           
-       }
+            self.tableViewOrder.reloadData()
+        }
+        
+        
+    }
 }
 
 //MARK:- TableView DelegateAnd DataSource
@@ -193,11 +246,11 @@ extension OrderListVC:CartListDelegate
     func updateCart(index: Int?)
     {
         let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
-               vc.updateCartId = self.cartList[index ?? 0].id
-               vc.isEdited = true
-              // vc.serviceDetail = self.serviceDetail
-               //vc.isFromSubCategoriesList = isFromSubCategoriesList
-               self.navigationController?.pushViewController(vc,animated:false)
+        vc.updateCartId = self.cartList[index ?? 0].id
+        vc.isEdited = true
+        // vc.serviceDetail = self.serviceDetail
+        //vc.isFromSubCategoriesList = isFromSubCategoriesList
+        self.navigationController?.pushViewController(vc,animated:false)
     }
     
     func removeFromCart(index: Int?) {
@@ -208,10 +261,10 @@ extension OrderListVC:CartListDelegate
                 self.row = index ?? 0
                 self.viewModel?.removeFromCartApi(cartId: self.cartList[index ?? 0].id, completion: { (responce) in
                     self.AlertMessageWithOkAction(titleStr: kAppName, messageStr: responce.message ?? "", Target: self)
-                        {
-                                 //   self.deleteCellROW()
-                            self.getCartList()
-                         }
+                    {
+                        //   self.deleteCellROW()
+                        self.getCartList()
+                    }
                 })
             }
         }

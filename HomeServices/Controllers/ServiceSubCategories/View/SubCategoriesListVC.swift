@@ -75,6 +75,7 @@ class SubCategoriesListVC: UIViewController {
                         {
                             self.imageViewBanner.setImage(with: url, placeholder: KImages.KDefaultIcon)
                         }
+                        self.lblServiceCount.text = "\(categoriesList.count) Services"
                         self.subCategoriesList = categoriesList
                         self.tableViewSubCategoriesList.isHidden = false
                         self.lblNoRecord.isHidden = true

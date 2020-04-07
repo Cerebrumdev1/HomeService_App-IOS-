@@ -87,14 +87,14 @@ class CategoriesDetailVC: CustomController {
             self.imageViewBanner.setImage(with: url, placeholder: KImages.KDefaultIcon)
         }
         lblServiceName.text = data.name
-        lblRate.text = "$ " + (data.serviceType?.price ?? "0")
-        lblPerPiece.text = "/ " + (data.serviceType?.type ?? "")
+        lblRate.text = "$ " + (data.price ?? "0")
+        lblPerPiece.text = "/ " + (data.type ?? "N/A")
         lblDescription.text = data.description
-        lblDuration.text = data.serviceType?.duration
-        lblTime.text = data.serviceType?.turnaroundTime
-        lblPricing.text = data.serviceType?.type
+        lblDuration.text = data.duration ?? "N/A"
+        lblTime.text = data.turnaroundTime ?? "N/A"
+        lblPricing.text = data.type ?? "N/A"
         
-        if let includeServices = data.serviceType?.includedServices
+        if let includeServices = data.includedServices
         {
            
             for included_Service in includeServices
@@ -106,7 +106,7 @@ class CategoriesDetailVC: CustomController {
             }
             }
         }
-        if let excludeServices = data.serviceType?.excludedServices
+        if let excludeServices = data.excludedServices
         {
             
             for exCluded_Service in excludeServices

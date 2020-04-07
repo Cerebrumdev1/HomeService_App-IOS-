@@ -62,6 +62,7 @@ class AppointmentDetailVC: CustomController {
     var isEdited: Bool?
     var updateCartId : String?
     var orderPrice :String?
+    var dayAndDate :String?
     
     //MARK:- life Cycle methods
     override func viewDidLoad() {
@@ -181,7 +182,7 @@ class AppointmentDetailVC: CustomController {
         else{
             //MARK:- SetData For Service Count
             lblServiceName.text = serviceDetail?.name
-            lblServicePrice.text = "$ " + (serviceDetail?.serviceType?.price ?? "0")
+            lblServicePrice.text = "$ " + (serviceDetail?.price ?? "0")
         }
         
     }
@@ -197,7 +198,7 @@ class AppointmentDetailVC: CustomController {
             }
             else
             {
-                lblServicePrice.text = "$ " + (serviceDetail?.serviceType?.price ?? "0")
+                lblServicePrice.text = "$ " + (serviceDetail?.price ?? "0")
             }
             setViewOnStepperClick(isHidden: true)
         }
@@ -213,7 +214,7 @@ class AppointmentDetailVC: CustomController {
             }
             else
             {
-                if let rate = serviceDetail?.serviceType?.price
+                if let rate = serviceDetail?.price
                 {
                     let totalRate = (Double(rate)!  * stepper.value)
                     lblServicePrice.text =   "$ \(Int(totalRate))"
@@ -303,14 +304,7 @@ class AppointmentDetailVC: CustomController {
         }
         
         let param = AddtoCartInputModel.init(serviceId: selectedServiceId, addressId: addressId, serviceDateTime: serviceDateTime, orderPrice:orderPrice, quantity: stepperCount, orderTotalPrice: totalprice)
-        if addressId == nil || addressId == "" {
-            showAlertMessage(titleStr: kAppName, messageStr: alertMessages.selectAddress)
-        }
-        else{
-            viewModel?.upDateCartApi(param: param, cartId: updateCartId, completion: { (responce) in
-                self.showAlert_Message(titleStr: kAppName, messageStr: responce.message ?? "")
-            })
-        }
+            viewModel?.updateToCartValidation(param: param, serviceDay: serviceDate, serviceTime: serviceTime, cartId: updateCartId)
     }
     func getCartDetailApi()
     {
@@ -330,11 +324,13 @@ class AppointmentDetailVC: CustomController {
                 self.viewStepper.value = Double(data.quantity ?? "") ?? 0.0
                 
                 let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                // let date = dateFormatter.date(from: data.serviceDateTime ?? "")
+                //dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"//"yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+              dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                
                 let dateFormatterMonth = DateFormatter()
                 //2020-03-30 14:00:00
+                 dateFormatterMonth.timeZone = TimeZone.current
                 dateFormatterMonth.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 if let date = dateFormatter.date(from: data.serviceDateTime ?? "")
                 {
@@ -345,8 +341,54 @@ class AppointmentDetailVC: CustomController {
                     print("There was an error decoding the string")
                     
                 }
+                self.setDateAndTime()
             }
         })
+    }
+    
+    //setDateTime
+    func setDateAndTime()
+    {
+        
+        //   let dateTime = (serviceDate ?? "") + " " + "2:00 PM"
+        let dateFormatterGet = DateFormatter()
+        //Fri Apr 3 2020 2:00 PM
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //MonthFormateWithDay
+        let dateFormatterMonth = DateFormatter()
+        //2020-03-30 14:00:00
+        dateFormatterMonth.dateFormat = "E MMM d yyyy"
+        if let date = dateFormatterGet.date(from: self.serviceDateTime ?? "")
+        {
+            dayAndDate = dateFormatterMonth.string(from: date)
+        }
+        else
+        {
+            print("There was an error decoding the string")
+            
+        }
+        
+        var index = 0
+        for selectedDate in  self.calendarListData
+        {
+            //                       if selectedDate.isSelected == true
+            //                       {
+            //                           self.calendarListData[index].isSelected = false
+            //                       }
+            if selectedDate.date == dayAndDate
+            {
+                self.calendarListData[index].isSelected = true
+                serviceDate =  self.calendarListData[index].date
+            }
+            else{
+                self.calendarListData[index].isSelected = false
+            }
+            index = index + 1
+        }
+        
+        
+        collectionViewCalender.reloadData()
+        
     }
     //addToCart
     func addToCartApi()
@@ -367,16 +409,10 @@ class AppointmentDetailVC: CustomController {
             print("There was an error decoding the string")
         }
         
-        let param = AddtoCartInputModel.init(serviceId: selectedServiceId, addressId: addressId, serviceDateTime: serviceDateTime, orderPrice: serviceDetail?.serviceType?.price, quantity: stepperCount, orderTotalPrice: totalprice)
-        if addressId == nil || addressId == "" {
-            showAlertMessage(titleStr: kAppName, messageStr: alertMessages.selectAddress)
-        }
-        else{
-            viewModel?.addToCartApi(param: param, completion: { (responce) in
-                print(responce)
-                self.showAlert_Message(titleStr: kAppName, messageStr: responce.message ?? "")
-            })
-        }
+        let param = AddtoCartInputModel.init(serviceId: selectedServiceId, addressId: addressId, serviceDateTime: serviceDateTime, orderPrice: serviceDetail?.price, quantity: stepperCount, orderTotalPrice: totalprice)
+      
+            viewModel?.addToCartValidation(param: param, serviceDay: serviceDate, serviceTime: serviceTime)
+        
     }
     
     //getSchedule
@@ -641,6 +677,15 @@ extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegat
 //MARK:- ViewDelegate
 extension AppointmentDetailVC  : AppointmentVCDelegate
 {
+    func addCarSuccess(msg: String) {
+         self.showAlert_Message(titleStr: kAppName, messageStr: msg)
+    }
+    
+    func Show_results(msg: String)
+    {
+        self.showAlertMessage(titleStr: kAppName, messageStr: msg)
+    }
+    
     func didError(error: String) {
         //showAlertMessage(titleStr: kAppName, messageStr: error)
         lblNoTimeSlot.isHidden = false

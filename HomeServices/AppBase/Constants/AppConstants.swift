@@ -361,5 +361,7 @@ struct AppointmentDetailIdentifiers
 
 struct alertMessages {
     static let selectAddress = "Add Address First"
+    static let selectDay = "Select date for service"
+    static let selectTime = "Select time for service"
 }
 
