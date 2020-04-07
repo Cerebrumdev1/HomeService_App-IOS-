@@ -113,6 +113,7 @@ extension SubCategoriesListVC : UITableViewDelegate,UITableViewDataSource
 
         let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
         vc.selectedId = subCategoriesList[indexPath.row].id
+        vc.isFromSubCategoriesList = true
         self.navigationController?.pushViewController(vc,animated:false)
     }
 }

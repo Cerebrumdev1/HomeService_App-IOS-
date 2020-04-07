@@ -443,6 +443,10 @@ extension UIViewController
         from_controller.navigationController?.pushViewController(to_Controller, animated: true)
     }
     
+    func present_To_Controller(from_controller:UIViewController,to_Controller:UIViewController)
+       {
+           from_controller.navigationController?.present(to_Controller, animated: true, completion: nil)
+       }
     @available(iOS 13.0, *)
     func getAppDelegate() -> AppDelegate
     {

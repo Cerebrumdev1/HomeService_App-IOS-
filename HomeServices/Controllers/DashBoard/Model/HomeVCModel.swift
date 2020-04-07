@@ -31,6 +31,7 @@ struct Banner: Codable {
 // MARK: - Service
 struct Service: Codable {
     let id: String?
+    let thumbnail : String?
     let name: String?
     let icon: String?
 }
@@ -39,6 +40,7 @@ struct Service: Codable {
 struct TrendingService: Codable {
     let id: String?
     let name: String?
+    let thumbnail : String?
     let icon: String?
 }
 

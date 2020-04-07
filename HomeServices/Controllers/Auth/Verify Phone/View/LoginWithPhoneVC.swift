@@ -32,6 +32,7 @@ class LoginWithPhoneVC: CustomController
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
         setUpView()
     }
     
@@ -45,7 +46,7 @@ class LoginWithPhoneVC: CustomController
         let country = countryPickerView.selectedCountry
         txtFldForCountryCode.text = country.phoneCode
         txtfieldPadding(textField: txtFldPhone)
-        imgViewArrowOnBtnProceed.CornerRadius(radius: 23)
+        imgViewArrowOnBtnProceed.CornerRadius(radius: imgViewArrowOnBtnProceed.frame.height/2)
         viewUnderLine.layer.cornerRadius = 6
         viewUnderLine.clipsToBounds = true
         

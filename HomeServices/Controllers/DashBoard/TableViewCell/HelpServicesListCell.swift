@@ -15,7 +15,7 @@ class HelpServicesListCell: UITableViewCell {
     @IBOutlet weak var collectionViewHelpServiceList: UICollectionView!
     
     //MARK:- Variables
-    let margin: CGFloat = 20
+    let margin: CGFloat = 18
     var servicesList = [Service]()
     var listCount: Int?
     var delegateService:ServicesDetailDelegate?
@@ -100,6 +100,6 @@ extension HelpServicesListCell:UICollectionViewDelegate,UICollectionViewDataSour
             + flowLayout.sectionInset.right
             + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
         let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-        return CGSize(width: size, height: 120)
+        return CGSize(width: size, height: 128)
     }
 }

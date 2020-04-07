@@ -21,6 +21,7 @@ class CategoriesDetailVC: CustomController {
     @IBOutlet weak var lblRate: UILabel!
     @IBOutlet weak var lblCostReplaced: UILabel!
     @IBOutlet weak var lblUnits: UILabel!
+    @IBOutlet weak var btnContinue: CustomButton!
     @IBOutlet weak var lblReparing: UILabel!
     @IBOutlet weak var lblPricing: UILabel!
     @IBOutlet weak var lblTime: UILabel!
@@ -36,6 +37,9 @@ class CategoriesDetailVC: CustomController {
     var viewModel : SubCategoriesViewModel?
     var servicesArray = [[String:Any]]()
     var includedDict = [String:Any]()
+    var selectedServiceId : String?
+    var serviceDetail : BodyDetail?
+    var isFromSubCategoriesList : Bool?
     
     //MARK:- LIFE CYCLE METHODS
     override func viewDidLoad() {
@@ -65,6 +69,9 @@ class CategoriesDetailVC: CustomController {
         imageViewBanner.layer.cornerRadius = 8
         imageViewBanner.layer.masksToBounds = true
         
+        //setColor
+         btnContinue.backgroundColor = Appcolor.kTheme_Color
+        
         //Api
         getCategoriesListApi()
     }
@@ -72,7 +79,9 @@ class CategoriesDetailVC: CustomController {
     //setData
     func setData(data: BodyDetail)
     {
-        self.viewRating.rating = Double(data.rating!)
+        self.serviceDetail = data
+        selectedServiceId = data.id
+        self.viewRating.rating = Double(data.rating ?? 0)
         if let url = data.thumbnail
         {
             self.imageViewBanner.setImage(with: url, placeholder: KImages.KDefaultIcon)
@@ -85,21 +94,29 @@ class CategoriesDetailVC: CustomController {
         lblTime.text = data.serviceType?.turnaroundTime
         lblPricing.text = data.serviceType?.type
         
-        let includeServices = data.serviceType?.includedServices
-        let excludeServices = data.serviceType?.excludedServices
-        for included_Service in includeServices!
+        if let includeServices = data.serviceType?.includedServices
         {
-            includedDict = ["name" :included_Service,"isIncluded":true]
-            self.servicesArray.append(includedDict)
+           
+            for included_Service in includeServices
+            {
+                if included_Service.isEmpty{}
+                 else{
+                includedDict = ["name" :included_Service,"isIncluded":true]
+                self.servicesArray.append(includedDict)
+            }
+            }
         }
-        
-        for exCluded_Service in excludeServices!
+        if let excludeServices = data.serviceType?.excludedServices
         {
-            includedDict = ["name" :exCluded_Service,"isIncluded":false]
-            self.servicesArray.append(includedDict)
+            
+            for exCluded_Service in excludeServices
+            {
+               if exCluded_Service.isEmpty{}
+                else{
+                includedDict = ["name" :exCluded_Service,"isIncluded":false]
+                self.servicesArray.append(includedDict)
+            }}
         }
-        
-        print(servicesArray)
         
         //SetTableViewHeight
         if servicesArray.count > 0
@@ -109,15 +126,18 @@ class CategoriesDetailVC: CustomController {
         }
         else
         {
-            ktableViewHeight.constant = 84
+            ktableViewHeight.constant = 88
         }
         
     }
     
     //MARK:- Hit Apis
+    
+   
+    
     func getCategoriesListApi()
     {
-        viewModel?.getServiceDetailApi(ServiceId : selectedId!,completion:
+        viewModel?.getServiceDetailApi(ServiceId : selectedId ?? "",completion:
             { (responce) in
                 print(responce)
                 if let categoriesDetail = responce.body
@@ -135,6 +155,9 @@ class CategoriesDetailVC: CustomController {
     @IBAction func ContinueAction(_ sender: Any)
     {
         let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
+        vc.selectedServiceId = selectedServiceId
+        vc.serviceDetail = self.serviceDetail
+        vc.isFromSubCategoriesList = isFromSubCategoriesList
         self.navigationController?.pushViewController(vc,animated:false)
     }
     @IBAction func btnBackAction(_ sender: Any)

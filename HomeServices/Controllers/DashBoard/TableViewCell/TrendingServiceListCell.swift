@@ -78,7 +78,7 @@ extension TrendingServiceListCell:UICollectionViewDataSource,UICollectionViewDel
                    + flowLayout.sectionInset.right
                    + (flowLayout.minimumInteritemSpacing * CGFloat(noOfCellsInRow - 1))
                let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(noOfCellsInRow))
-               return CGSize(width: size, height: 112)
+               return CGSize(width: size, height: 104)
        //return CGSize(width: 233.0, height: 120.0)
     }
 

@@ -95,13 +95,11 @@ class AddressListVC: CustomController
                 self.viewModel?.DeleteAddress(addressID: adrsID)
             }
         }
-        
-        
     }
     
     func setUI()
     {
-        self.btnAdd.backgroundColor = Appcolor.kTheme_Color
+        self.btnAdd.backgroundColor = AppButtonColor.kBlueColor
         self.btnAdd.setTitleColor(Appcolor.kTextColorWhite, for: UIControl.State.normal)
     }
     

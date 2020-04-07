@@ -29,7 +29,7 @@ class HomeViewModel
     //MARK:- GetHomeServiceApi
         func getHomeServicesApi(completion: @escaping successHandler)
         {
-            WebService.Shared.GetApi(url: HomeServiceApi.BASE_URL + HomeServiceApi.getServiceCategories , Target: self.view, showLoader: true, completionResponse: { (response) in
+            WebService.Shared.GetApi(url: APIAddress.BASE_URL + APIAddress.getServiceCategories , Target: self.view, showLoader: true, completionResponse: { (response) in
                   print(response)
                         do
                         {

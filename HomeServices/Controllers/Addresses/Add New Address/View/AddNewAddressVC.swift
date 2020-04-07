@@ -145,10 +145,10 @@ class AddNewAddressVC: CustomController,GMSMapViewDelegate,UITextFieldDelegate,U
         self.btnAdd.backgroundColor = Appcolor.kButtonBackgroundColor
         self.btnAdd.setTitleColor(Appcolor.kTextColorWhite, for: UIControl.State.normal)
         
-        self.btnAdd.backgroundColor = Appcolor.kButtonBackgroundColor
+        self.btnAdd.backgroundColor = AppButtonColor.kBlueColor
         self.btnAdd.setTitleColor(Appcolor.kTextColorWhite, for: UIControl.State.normal)
         
-        self.btnSaveAddress.backgroundColor = Appcolor.kButtonBackgroundColor
+        self.btnSaveAddress.backgroundColor = AppButtonColor.kBlueColor
         self.btnSaveAddress.setTitleColor(Appcolor.kTextColorWhite, for: UIControl.State.normal)
         
     }

@@ -116,8 +116,7 @@ struct database
 struct APIAddress
 {
     
-    
-    static let BASE_URL = "http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
+    static let BASE_URL = "http://camonher.infinitywebtechnologies.com:9066/api/mobile/"//"http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
    // static let BASE_URL = "http://10.8.23.202:9062/"
     
     static let CHECK_PHONE_NUMBER = BASE_URL + "driver/auth/checkPhoneNumber"
@@ -133,8 +132,30 @@ struct APIAddress
     static let DELETE_ADDRESS = BASE_URL + "address/delete"
     static let ADD_ADDRESS = BASE_URL + "address/add"
     static let Get_Schedule = BASE_URL + "schedule/getSchedule?serviceId="
+    static let getScheduleParm = "&serviceDate="
+    static let getCartList = BASE_URL + "cart/list"
+    static let getServiceCategories = "services/getCategories"
+    static let getSubCategoriesList = "services/getServices/"
+    static let getServiceDeatil = "services/detail?serviceId="
+//       static let REGISTER = BASE_URL + "register"
+//       static let LOGIN = BASE_URL + "login"
+    static let addToCart =  "cart/add"
+    static let deleteToCart = BASE_URL + "cart/remove?cartId="
+    static let cartDetail = BASE_URL  + "cart/detail/"
+    static let updateCart =  BASE_URL  + "cart/update"
 }
-
+//MARK- APIParam
+struct ApiParam
+{
+    static let serviceId = "serviceId"
+    static let addressId = "addressId"
+    static let serviceDateTime = "serviceDateTime"
+    static let orderPrice = "orderPrice"
+    static let quantity = "quantity"
+    static let orderTotalPrice = "orderTotalPrice"
+    static let cartId = "cartId"
+    
+}
 let kHeader_app_json = ["Accept" : "application/json"]
 
 
@@ -289,18 +310,6 @@ extension String
 
 //MARK:- HomeService Constant
 
-//MARK:- API
-struct HomeServiceApi
-{
-    static let BASE_URL = "http://camonher.infinitywebtechnologies.com:9066/api/mobile/services/"//"http://camonher.infinitywebtechnologies.com:9065/api/"
-    static let getServiceCategories = "getCategories"
-    static let getSubCategoriesList = "getServices/"
-    static let getServiceDeatil = "detail?serviceId="
-    static let REGISTER = BASE_URL + "register"
-    static let LOGIN = BASE_URL + "login"
-    
-}
-
 //MARK:- IMAGES
 struct KImages {
     static let KDefaultIcon = "backGroundIcon"
@@ -337,6 +346,7 @@ struct HomeIdentifiers {
     static let IncludedServicesCell = "IncludedServicesCell"
     static let OrderListVC = "OrderListVC"
     static let OrderListCell = "OrderListCell"
+    static let PromoCodeCell = "PromoCodeCell"
 }
 
 struct AppointmentDetailIdentifiers
@@ -344,6 +354,12 @@ struct AppointmentDetailIdentifiers
     static let AppointmentDetailVC = "AppointmentDetailVC"
     static let AppCalenderCollectionCell = "AppCalenderCollectionCell"
     static let AddressTableCell = "AddressTableCell"
+    static let TimeSlotCollectionCell = "TimeSlotCollectionCell"
 }
 
+//MARK:- Alerts
+
+struct alertMessages {
+    static let selectAddress = "Add Address First"
+}
 

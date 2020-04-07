@@ -22,9 +22,11 @@ class TrendingServiceCollectionCell: UICollectionViewCell {
 //        self.viewBack.layer.masksToBounds = true
         self.viewBack.layer.borderWidth = 0.5
         self.viewBack.layer.borderColor = UIColor.init(netHex: 0xD9D4D4).cgColor
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
         
         //setData
-        if let url = data.icon
+        if let url = data.thumbnail
         {
               self.imageView.setImage(with: url, placeholder: KImages.KDefaultIcon)
               }

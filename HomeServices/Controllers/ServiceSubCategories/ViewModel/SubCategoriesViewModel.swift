@@ -32,7 +32,7 @@ class SubCategoriesViewModel
     //MARK:- GetSubCategoriesServiceApi
         func getSubCategoriesListApi(selectedId:String?,completion: @escaping successHandler)
         {
-            WebService.Shared.GetApi(url: HomeServiceApi.BASE_URL + HomeServiceApi.getSubCategoriesList + (selectedId ?? "") , Target: self.view, showLoader: true, completionResponse: { (response) in
+            WebService.Shared.GetApi(url: APIAddress.BASE_URL + APIAddress.getSubCategoriesList + (selectedId ?? "") , Target: self.view, showLoader: true, completionResponse: { (response) in
                   print(response)
                         do
                         {
@@ -55,7 +55,7 @@ class SubCategoriesViewModel
     
     func getServiceDetailApi(ServiceId:String?,completion: @escaping successDetailHandler)
           {
-              WebService.Shared.GetApi(url: HomeServiceApi.BASE_URL + HomeServiceApi.getServiceDeatil + (ServiceId ?? "") , Target: self.view, showLoader: true, completionResponse: { (response) in
+              WebService.Shared.GetApi(url: APIAddress.BASE_URL + APIAddress.getServiceDeatil + (ServiceId ?? "") , Target: self.view, showLoader: true, completionResponse: { (response) in
                     print(response)
                           do
                           {
@@ -73,7 +73,9 @@ class SubCategoriesViewModel
                           self.delegate.didError(error: error)
                       })
           }
+    
       
+
 
     func jsonToString(json: [String:Any]) -> String
     {
@@ -100,7 +102,8 @@ extension SubCategoriesListVC : SubCategoriesDelegate
         
     }
     func didError(error: String) {
-        
+      self.lblNoRecord.isHidden = false
+        self.tableViewSubCategoriesList.isHidden = true
     }
     
     

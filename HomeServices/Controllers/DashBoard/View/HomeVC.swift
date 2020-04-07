@@ -25,6 +25,7 @@ class HomeVC: UIViewController {
     @IBOutlet weak var viewSettingTab: UIView!
     @IBOutlet weak var viewMyCasesTab: UIView!
     @IBOutlet weak var btnDrawer: UIBarButtonItem!
+    @IBOutlet weak var lblNoTrendingServices: UILabel!
     
     var viewModel:HomeViewModel?
     var bannersList = [Banner]()
@@ -67,7 +68,7 @@ class HomeVC: UIViewController {
             self.tableView.dataSource = self
         }
         tableView.separatorStyle = .none
-        viewSearch.dropShadow(radius: 8.0)
+        //viewSearch.dropShadow(radius: 8.0)
         
     }
     
@@ -114,6 +115,12 @@ class HomeVC: UIViewController {
     
     //MARK:- Actions
     
+    @IBAction func cartListingAction(_ sender: Any) {
+        
+        let vc = UIStoryboard.init(name: kStoryBoard.order, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.OrderListVC) as! OrderListVC
+        vc.isFromSubCategoriesList = false
+                 self.navigationController?.pushViewController(vc,animated:false)
+    }
     @IBAction func TabActions(_ sender: Any)
     {
         switch (sender as AnyObject).tag {
@@ -182,9 +189,20 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource
         case 1:
             if let cell = tableView.dequeueReusableCell(withIdentifier: HomeIdentifiers.TrendingServiceListCell, for: indexPath) as? TrendingServiceListCell
             {
-                cell.delegateTrendingService = self
-                cell.trendingServicesList = self.trendingServicesList
-                cell.collectionViewTrendingServiceList.reloadData()
+                
+                if self.trendingServicesList.count > 0
+                {
+                    lblNoTrendingServices.isHidden = true
+                    cell.collectionViewTrendingServiceList.isHidden = false
+                    cell.delegateTrendingService = self
+                    cell.trendingServicesList = self.trendingServicesList
+                    cell.collectionViewTrendingServiceList.reloadData()
+                }else
+                {
+                    cell.collectionViewTrendingServiceList.isHidden = true
+                    lblNoTrendingServices.isHidden = false
+                }
+                
                 return cell
             }
             break
@@ -231,6 +249,7 @@ extension HomeVC : ServicesDetailDelegate
     func trendingServicesDetail(index: Int?) {
         let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
         vc.selectedId = self.trendingServicesList[index ?? 0].id!
+        vc.isFromSubCategoriesList = false
         self.navigationController?.pushViewController(vc,animated:false)
     }
     

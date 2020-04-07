@@ -35,7 +35,9 @@ class Navigation
         case HomeVC
         case EditProfileVC
         case AddressListVC
-        case  AddNewAddressVC
+        case AddNewAddressVC
+        case PaymentVC
+        case ApplyPromoCodeVC
         
         
         var obj: UIViewController?
@@ -79,6 +81,11 @@ class Navigation
                           return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddressListVC")
              case .AddNewAddressVC:
                       return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddNewAddressVC")
+            case .PaymentVC:
+                return StoryBoards.Payment.obj?.instantiateViewController(withIdentifier: "PaymentVC")
+                
+            case .ApplyPromoCodeVC:
+                return StoryBoards.Order.obj?.instantiateViewController(withIdentifier: "ApplyPromoCodeVC")
       
             }
         }
@@ -87,6 +94,8 @@ class Navigation
     {
         case Main
         case Home
+        case Payment
+        case Order
         
         var obj: UIStoryboard?
         {
@@ -96,7 +105,10 @@ class Navigation
                 return UIStoryboard(name: "Main", bundle: nil)
             case .Home:
                 return UIStoryboard(name: "Home", bundle: nil)
-            
+            case .Payment:
+                return UIStoryboard(name: "Payment", bundle: nil)
+            case .Order:
+                return UIStoryboard(name: "Order", bundle: nil)
             }
         }
         

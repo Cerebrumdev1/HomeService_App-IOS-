@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                UINavigationBar.appearance().barTintColor = AppButtonColor.kOrangeColor
                UINavigationBar.appearance().isTranslucent = false
                UINavigationBar.appearance().clipsToBounds = false
-            UINavigationBar.appearance().backgroundColor = AppButtonColor.kOrangeColor
+               UINavigationBar.appearance().backgroundColor = AppButtonColor.kOrangeColor
                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font : (UIFont(name: "Helvetica Neue", size: 20))!, NSAttributedString.Key.foregroundColor: UIColor.black]
                
            }

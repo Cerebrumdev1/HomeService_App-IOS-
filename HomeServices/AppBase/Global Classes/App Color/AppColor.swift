@@ -37,7 +37,8 @@ struct Appcolor
     
     static let kDefaultTintColorBlue = UIColor.init(red: 2.0/255.0, green: 190.0/255.0, blue: 170.0/255.0, alpha: 1.0)//blue default
     
-    static let kTheme_Color = UIColor.init(red: 52.0/255.0, green: 199.0/255.0, blue: 89.0/255.0, alpha: 1.0)//green for now
+     static let kBlueColorDefault = UIColor.init(red: 51.0/255.0, green: 116.0/255.0, blue: 218.0/255.0, alpha: 1.0)//blue for now
+    static let kTheme_Color =  UIColor.init(red: 255.0/255.0, green: 175.0/255.0, blue: 16.0/255.0, alpha: 1.0)//Orange for now
     
     static let kGray = UIColor.init(red: 67/255.0, green: 67/255.0, blue: 67/255.0, alpha: 1.0)
     
@@ -82,6 +83,9 @@ struct AppButtonColor
     
     static let kBlueColor = UIColor.init(red: 51.0/255.0, green: 116.0/255.0, blue: 218.0/255.0, alpha: 1.0)//blue for now
      static let kOrangeColor = UIColor.init(red: 255.0/255.0, green: 175.0/255.0, blue: 16.0/255.0, alpha: 1.0)//Orange for now
+     static let kLightBlueColor = UIColor.init(red: 235.0/255.0, green: 240.0/255.0, blue: 254.0/255.0, alpha: 1.0)//LightBlue for now
+      static let kLightGaryColor = UIColor.init(red: 232.0/255.0, green: 234.0/255.0, blue: 233.0/255.0, alpha: 1.0)//LightGray for now
+    
 }
 
 struct TextColor{

@@ -18,6 +18,14 @@
         override func viewDidLoad() {
             super.viewDidLoad()
 
+            if AppDefaults.shared.userID == ""
+            {
+               // self.setRootView("PageControllerVC", storyBoard: "Main")
+            }
+            else
+            {
+               self.setRootView("SWRevealViewController", storyBoard: "Home")
+            }
             pageController = UIPageViewController(transitionStyle: .pageCurl, navigationOrientation: .horizontal, options: nil)
             pageController.dataSource = self
             pageController.delegate = self
