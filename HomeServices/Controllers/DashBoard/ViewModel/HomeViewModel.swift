@@ -16,6 +16,7 @@ protocol HomeServiceDelegate:class
 
 class HomeViewModel
 {
+    typealias successCartHandler = (CartListingModel) -> Void
     typealias successHandler = (HomeModel) -> Void
     var delegate : HomeServiceDelegate
     var view : UIViewController
@@ -44,9 +45,31 @@ class HomeViewModel
                         }
                         
                     }, completionnilResponse: {(error) in
-                        self.delegate.didError(error: error)
+                        self.view.showAlertMessage(titleStr: kAppName, messageStr: error)
                     })
         }
+    
+    //MARK:- CartListApi
+    func getCartListApi(completion: @escaping successCartHandler)
+    {
+        WebService.Shared.GetApi(url: APIAddress.getCartList,Target: self.view, showLoader: true, completionResponse: { (response) in
+            print(response)
+            do
+            {
+                let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                let getAllListResponse = try JSONDecoder().decode(CartListingModel.self, from: jsonData)
+                completion(getAllListResponse)
+            }
+            catch
+            {
+                print(error.localizedDescription)
+                self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+            }
+            
+        }, completionnilResponse: {(error) in
+            self.delegate.didError(error: error)
+        })
+    }
 
     func jsonToString(json: [String:Any]) -> String
     {
@@ -74,7 +97,7 @@ extension HomeVC : HomeServiceDelegate
     }
     
     func didError(error: String) {
-        
+        btnCart.isHidden = true
     }
     
     

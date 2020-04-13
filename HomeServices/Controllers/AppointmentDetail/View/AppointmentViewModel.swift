@@ -22,6 +22,7 @@ class Appontment_ViewModel
     typealias sucessCartDetailHandler = (CartDetail) -> Void
     typealias successHandler = (AppointmentModel) -> Void
     typealias successAddToCartHandler = (AddToCartModel) -> Void
+     typealias successCartHandler = (CartListingModel) -> Void
     
     var delegate : AppointmentVCDelegate
     var view : UIViewController
@@ -192,6 +193,49 @@ class Appontment_ViewModel
                self.delegate.addCarSuccess(msg:  responce.message ?? "")
            })
        }
+    //MARK:- CartListApi
+     func getCartListApi(completion: @escaping successCartHandler)
+     {
+         WebService.Shared.GetApi(url: APIAddress.getCartList,Target: self.view, showLoader: true, completionResponse: { (response) in
+             print(response)
+             do
+             {
+                 let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                 let getAllListResponse = try JSONDecoder().decode(CartListingModel.self, from: jsonData)
+                 completion(getAllListResponse)
+             }
+             catch
+             {
+                 print(error.localizedDescription)
+                 self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+             }
+             
+         }, completionnilResponse: {(error) in
+            // self.delegate.didError(error: error)
+         })
+     }
+    //MARK:- RemoveFromCart Api
+    func removeCouponApi(Id:String?,completion: @escaping successAddToCartHandler)
+    {
+        let obj : [String:Any] = [ApiParam.id:Id ?? ""]
+        
+        WebService.Shared.PostApi(url: APIAddress.removeCoupon, parameter: obj, Target:  self.view, completionResponse: { (response) in
+            do
+            {
+                let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                let getAllListResponse = try JSONDecoder().decode(AddToCartModel.self, from: jsonData)
+                completion(getAllListResponse)
+            }
+            catch
+            {
+                print(error.localizedDescription)
+                self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+            }
+        }, completionnilResponse: { (error) in
+            self.view.showAlertMessage(titleStr: kAppName, messageStr: error)
+        })
+    }
+    
     //MARK:- GetScheduleJSON
     private func GetScheduleJSON(data: [String : Any],completionResponse:  @escaping (AppointmentModel) -> Void,completionError: @escaping (String?) -> Void)
     {

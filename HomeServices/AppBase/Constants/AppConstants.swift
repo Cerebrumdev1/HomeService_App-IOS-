@@ -116,7 +116,7 @@ struct database
 struct APIAddress
 {
     
-    static let BASE_URL = "http://camonher.infinitywebtechnologies.com:9066/api/mobile/"//"http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
+    static let BASE_URL = "http://51.79.40.224:9061/api/mobile/"//"http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
    // static let BASE_URL = "http://10.8.23.202:9062/"
     
     static let CHECK_PHONE_NUMBER = BASE_URL + "driver/auth/checkPhoneNumber"
@@ -143,7 +143,15 @@ struct APIAddress
     static let deleteToCart = BASE_URL + "cart/remove?cartId="
     static let cartDetail = BASE_URL  + "cart/detail/"
     static let updateCart =  BASE_URL  + "cart/update"
+    static let getPromoCodeList = BASE_URL  + "coupan/getPromoList"
+    static let applyCoupon = BASE_URL  + "coupan/applyCoupan"
+    static let removeCoupon = BASE_URL  + "coupan/removeCoupan"
+    static let createOrder = BASE_URL + "orders/create"
+    static let orderList = BASE_URL + "orders/list?progressStatus="
+    static let page = "&page="
+    static let limit = "&limit="
 }
+
 //MARK- APIParam
 struct ApiParam
 {
@@ -154,6 +162,7 @@ struct ApiParam
     static let quantity = "quantity"
     static let orderTotalPrice = "orderTotalPrice"
     static let cartId = "cartId"
+    static let id = "promoCode"
     
 }
 let kHeader_app_json = ["Accept" : "application/json"]
@@ -363,5 +372,7 @@ struct alertMessages {
     static let selectAddress = "Add Address First"
     static let selectDay = "Select date for service"
     static let selectTime = "Select time for service"
+    static let enterPromoCode = "Enter Promo Code First"
+    static let selectQuantity = "Add quantity for this service"
 }
 

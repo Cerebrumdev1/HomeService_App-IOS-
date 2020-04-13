@@ -53,9 +53,9 @@ class SideMenuVC: BaseUIViewController,UIActionSheetDelegate
     //MARK:- Other functions
     func SetUI()
     {
-        sideMenu = ["Home","Profile","Addresses","Notifications","Settings","Help", "Logout"]
+        sideMenu = ["Home","Profile","Addresses","Orders","Notifications","Settings","Help", "Logout"]
         
-        sideMenuImg  = ["home","profile2","address","notification","settings","help","logout"]
+        sideMenuImg  = ["home","profile2","address","settings","notification","settings","help","logout"]
         
         tableViewMenu.dataSource = self
         tableViewMenu.delegate = self
@@ -120,57 +120,65 @@ extension SideMenuVC : UITableViewDelegate
         tableView.deselectRow(at: indexPath, animated: true)
         
         
-               switch indexPath.row
-               {
-               case 0:
-                   let controller = Navigation.GetInstance(of: .HomeVC) as! HomeVC
-                             let frontVC = revealViewController().frontViewController as? UINavigationController
-                             frontVC?.pushViewController(controller, animated: false)
-                             revealViewController().pushFrontViewController(frontVC, animated: true)
-                   
-                   break
-               case 1:
-                   let controller = Navigation.GetInstance(of: .EditProfileVC) as! EditProfileVC
-                   let frontVC = revealViewController().frontViewController as? UINavigationController
-                   frontVC?.pushViewController(controller, animated: false)
-                   revealViewController().pushFrontViewController(frontVC, animated: true)
-                   break
-                   
-                   case 2:
-                           let controller = Navigation.GetInstance(of: .AddressListVC) as! AddressListVC
-                           let frontVC = revealViewController().frontViewController as? UINavigationController
-                           frontVC?.pushViewController(controller, animated: false)
-                           revealViewController().pushFrontViewController(frontVC, animated: true)
-                           break
-                   
-               case 3:
-                   let controller = Navigation.GetInstance(of: .NotificationVC) as! NotificationVC
-                   let frontVC = revealViewController().frontViewController as? UINavigationController
-                   frontVC?.pushViewController(controller, animated: false)
-                   revealViewController().pushFrontViewController(frontVC, animated: true)
-                  
-                   
-                   break
-                   
-               case 4:
-                   
-                  
-                   break
-                   
-               case 5:
-                   
-                 
-                   break
-                   
-             case 6:
-                self.logout_app()
-             
-               break
-               
-                   
-               default: break
-                   
-               }
+        switch indexPath.row
+        {
+        case 0:
+            let controller = Navigation.GetInstance(of: .HomeVC) as! HomeVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            
+            break
+        case 1:
+            let controller = Navigation.GetInstance(of: .EditProfileVC) as! EditProfileVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            break
+            
+        case 2:
+            let controller = Navigation.GetInstance(of: .AddressListVC) as! AddressListVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            break
+            
+        case 3:
+            let controller = Navigation.GetInstance(of: .CreatedOrderListVC) as! CreatedOrderListVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            break
+        case 4:
+            let controller = Navigation.GetInstance(of: .NotificationVC) as! NotificationVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            
+            break
+            
+        case 5:
+            let controller = Navigation.GetInstance(of: .SettingVC) as! SettingVC
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            
+            break
+            
+        case 6:
+            showAlertMessage(titleStr: kAppName, messageStr: "Coming Soon")
+            
+            break
+            
+        case 7:
+            self.logout_app()
+            
+            break
+            
+            
+        default: break
+            
+        }
         
     }
     
@@ -207,36 +215,42 @@ extension SideMenuVC : UITableViewDelegate
                 let msg = result["message"] as? String ?? "Null!"
                 self.AlertMessageWithOkAction(titleStr: kAppName, messageStr: msg, Target: self)
                 {
-                    AppDefaults.shared.userID = ""
-                    AppDefaults.shared.userTYPE = 0
-                    AppDefaults.shared.userName = ""
-                    AppDefaults.shared.userFirstName = ""
-                    AppDefaults.shared.userLastName = ""
-                    AppDefaults.shared.userImage = ""
-                    AppDefaults.shared.userEmail = ""
-                    AppDefaults.shared.userJWT_Token = ""
-                    AppDefaults.shared.firebaseVID = ""
-                    AppDefaults.shared.firebaseToken = ""
-                    AppDefaults.shared.userPhoneNumber = ""
-                    AppDefaults.shared.userCountryCode = ""
-                    AppDefaults.shared.userHomeAddress = ""
-                    AppDefaults.shared.app_LATITUDE = ""
-                    AppDefaults.shared.app_LONGITUDE = ""
-                    // AppDefaults.shared.userDeviceToken = ""
-                    configs.kAppdelegate.setRootViewController()
+                    self.emptyData()
                     
                 }
             }
             else
             {
-                self.showAlertMessage(titleStr: kAppName, messageStr: kSomthingWrong)
+                self.emptyData()
+                // self.showAlertMessage(titleStr: kAppName, messageStr: kSomthingWrong)
             }
             
         })
         { (error) in
-            self.showAlertMessage(titleStr: kAppName, messageStr: error)
+            self.emptyData()
+            // self.showAlertMessage(titleStr: kAppName, messageStr: error)
         }
     }
+    
+    func emptyData()
+    {
+        AppDefaults.shared.userID = ""
+        AppDefaults.shared.userTYPE = 0
+        AppDefaults.shared.userName = ""
+        AppDefaults.shared.userFirstName = ""
+        AppDefaults.shared.userLastName = ""
+        AppDefaults.shared.userImage = ""
+        AppDefaults.shared.userEmail = ""
+        AppDefaults.shared.userJWT_Token = ""
+        AppDefaults.shared.firebaseVID = ""
+        AppDefaults.shared.firebaseToken = ""
+        AppDefaults.shared.userPhoneNumber = ""
+        AppDefaults.shared.userCountryCode = ""
+        AppDefaults.shared.userHomeAddress = ""
+        AppDefaults.shared.app_LATITUDE = ""
+        AppDefaults.shared.app_LONGITUDE = ""
+        // AppDefaults.shared.userDeviceToken = ""
+        configs.kAppdelegate.setRootViewController()       }
     
 }
 

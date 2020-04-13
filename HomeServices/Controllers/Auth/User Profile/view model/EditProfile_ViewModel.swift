@@ -14,6 +14,7 @@ protocol EditProfileVCDelegate
 {
     func Show_results(msg: String)
     func getData (model : SignIn_ResponseModel)
+    func updateSuccess()
 }
 
 class EditProfile_ViewModel
@@ -116,8 +117,10 @@ class EditProfile_ViewModel
                                  AppDefaults.shared.userID = model.body?.id ?? ""
                                  AppDefaults.shared.userImage = model.body?.image ?? ""
                 
-                self.view.showAlertMessage(titleStr: kAppName, messageStr: "Profile updated successfully.")
-
+                //self.view.showAlertMessage(titleStr: kAppName, messageStr: "Profile updated successfully.")
+                self.view.AlertMessageWithOkAction(titleStr: kAppName, messageStr: "Profile updated successfully.", Target: self.view) {
+                    self.delegate.updateSuccess()
+                }
 
               }
               catch

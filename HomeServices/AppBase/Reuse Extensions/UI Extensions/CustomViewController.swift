@@ -49,6 +49,8 @@ class CustomController: UIViewController
         addShadowNavColor()
     }
     
+   
+    
     //MARK:-setBoarder
     func setBtnBorder(btn:UIButton)
        {

@@ -46,7 +46,7 @@ class HelpServicesListCell: UITableViewCell {
     func setView()
     {
         listCount = servicesList.count
-        kCollectionHeight.constant = ((kCollectionHeight.constant / 2) * CGFloat(listCount!)) + 70
+        kCollectionHeight.constant = ((kCollectionHeight.constant / 2) * CGFloat(listCount!)) + 78
         collectionViewHelpServiceList.reloadData()
     }
     

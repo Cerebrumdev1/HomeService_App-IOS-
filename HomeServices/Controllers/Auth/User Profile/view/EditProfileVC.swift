@@ -212,6 +212,17 @@ class EditProfileVC: CustomController,UIScrollViewDelegate
 //MARK:- EditProDelegate
 extension EditProfileVC:EditProfileVCDelegate
 {
+    func updateSuccess() {
+        btnUpdateProfile.isUserInteractionEnabled = false
+               tf_firstName.isUserInteractionEnabled = false
+               tf_lastName.isUserInteractionEnabled = false
+               tf_email.isUserInteractionEnabled = false
+               tf_address.isUserInteractionEnabled = false
+               btnProceed.isUserInteractionEnabled = false
+               btnProceed.isHidden = true
+               imgViewSelectImage.isHidden = true
+    }
+    
     func getData(model: SignIn_ResponseModel) {
         localModel = model
         setData()

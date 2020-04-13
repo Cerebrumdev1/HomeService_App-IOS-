@@ -433,6 +433,11 @@ extension UIViewController
         controller.navigationController?.isNavigationBarHidden = true
     }
     
+    func unHideNAV_BAR (controller : UIViewController)
+    {
+        controller.navigationController?.isNavigationBarHidden = false
+    }
+    
     func moveBACK (controller : UIViewController)
     {
         controller.navigationController?.popViewController(animated: true);

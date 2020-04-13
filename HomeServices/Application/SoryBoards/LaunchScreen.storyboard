@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,6 +15,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="1oI-pz-wPI">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="homeImg" translatesAutoresizingMaskIntoConstraints="NO" id="aRG-DR-Ptj">
                                 <rect key="frame" x="49" y="384" width="131" height="128"/>
                                 <constraints>
@@ -34,8 +37,12 @@
                         <constraints>
                             <constraint firstItem="aRG-DR-Ptj" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" constant="-92.5" id="8wd-Zo-53p"/>
                             <constraint firstItem="ixS-MP-op8" firstAttribute="leading" secondItem="aRG-DR-Ptj" secondAttribute="trailing" constant="9" id="Ay5-0X-hjL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="1oI-pz-wPI" secondAttribute="bottom" constant="-34" id="ZZr-rn-xZq"/>
                             <constraint firstItem="aRG-DR-Ptj" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="bAF-sD-9KM"/>
                             <constraint firstItem="ixS-MP-op8" firstAttribute="top" secondItem="aRG-DR-Ptj" secondAttribute="top" id="bQu-Vl-V5H"/>
+                            <constraint firstItem="1oI-pz-wPI" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="n1u-az-Wpu"/>
+                            <constraint firstItem="1oI-pz-wPI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-44" id="olQ-g1-QC9"/>
+                            <constraint firstItem="1oI-pz-wPI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vEf-Ra-erv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -48,5 +55,6 @@
     <resources>
         <image name="homeImg" width="210" height="166"/>
         <image name="homeLabel" width="295.5" height="137.5"/>
+        <image name="splash" width="401" height="1018"/>
     </resources>
 </document>

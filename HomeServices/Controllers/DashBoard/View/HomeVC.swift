@@ -18,6 +18,8 @@ protocol ServicesDetailDelegate:class
 class HomeVC: UIViewController {
     
     //MARK:- Outlet and Variables
+    @IBOutlet weak var btnCartListing: UIBarButtonItem!
+    @IBOutlet weak var btnCart: CustomButton!
     @IBOutlet weak var lblNoBanner: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var viewSearch: UIView!
@@ -32,6 +34,7 @@ class HomeVC: UIViewController {
     var trendingServicesList = [TrendingService]()
     var servicesList = [Service]()
     var isFirstTimeCallDelegate = false
+    var cartList = [CartListingModel.Datum]()
     public  static var isSideMenueSelected:Bool?
     
     //MARK:- Life Cycle Methods
@@ -44,6 +47,7 @@ class HomeVC: UIViewController {
     {
         super.viewWillAppear(true)
         
+        unHideNAV_BAR(controller: self)
         if HomeVC.isSideMenueSelected == true{
             // self.setTapGestureOnSWRevealontroller(view: self.view, controller: self)
             
@@ -72,12 +76,6 @@ class HomeVC: UIViewController {
         
     }
     
-    //MARK:- Actions
-    @IBAction func SideMenuAction(_ sender: Any)
-    {
-        
-    }
-    
     //MARK:- Hit API
     func getServices()
     {
@@ -98,7 +96,23 @@ class HomeVC: UIViewController {
             self.tableView.reloadData()
         })
     }
-    
+    //cartList
+    func getCartList()
+       {
+           viewModel?.getCartListApi(completion: { (responce) in
+               print(responce)
+               if let cartListData = responce.body{
+                   if cartListData.data.count > 0
+                   {
+                    self.cartList = cartListData.data
+                    self.btnCart.isHidden = false
+                   }
+                   else{
+                    self.btnCart.isHidden = true
+                }
+               }
+           })
+       }
     
     //MARK:-Tap gesture for swrevealcontroller
     func setTapGestureOnSWRevealontroller(view: UIView,controller: UIViewController)
@@ -115,11 +129,17 @@ class HomeVC: UIViewController {
     
     //MARK:- Actions
     
+    @IBAction func barBtnCartAction(_ sender: Any) {
+        let vc = UIStoryboard.init(name: kStoryBoard.order, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.OrderListVC) as! OrderListVC
+        vc.isFromSubCategoriesList = false
+        self.navigationController?.pushViewController(vc,animated:false)
+    }
+    
     @IBAction func cartListingAction(_ sender: Any) {
         
         let vc = UIStoryboard.init(name: kStoryBoard.order, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.OrderListVC) as! OrderListVC
         vc.isFromSubCategoriesList = false
-                 self.navigationController?.pushViewController(vc,animated:false)
+        self.navigationController?.pushViewController(vc,animated:false)
     }
     @IBAction func TabActions(_ sender: Any)
     {

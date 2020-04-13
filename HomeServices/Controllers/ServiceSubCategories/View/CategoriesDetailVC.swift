@@ -32,6 +32,7 @@ class CategoriesDetailVC: CustomController {
     @IBOutlet weak var viewStartFromBack: CustomUIView!
     @IBOutlet weak var viewDurationBack: CustomUIView!
     @IBOutlet weak var tableViewDetail: UITableView!
+    @IBOutlet weak var viewStepper: GMStepper!
     
     var selectedId : String?
     var viewModel : SubCategoriesViewModel?
@@ -40,6 +41,8 @@ class CategoriesDetailVC: CustomController {
     var selectedServiceId : String?
     var serviceDetail : BodyDetail?
     var isFromSubCategoriesList : Bool?
+    var stepperCount = "0"
+    var totalprice : String?
     
     //MARK:- LIFE CYCLE METHODS
     override func viewDidLoad() {
@@ -56,7 +59,7 @@ class CategoriesDetailVC: CustomController {
     func setView()
     {
         viewModel = SubCategoriesViewModel.init(Delegate: self, view: self)
-        
+        viewStepper.addTarget(self, action: #selector(stepperValueChanged), for: .valueChanged)
         tableViewDetail.delegate = self
         tableViewDetail.dataSource = self
         tableViewDetail.separatorStyle = .none
@@ -75,6 +78,25 @@ class CategoriesDetailVC: CustomController {
         //Api
         getCategoriesListApi()
     }
+    //MARK:- StepperAction
+    @objc func stepperValueChanged(stepper: GMStepper)
+     {
+         print(stepper.value, terminator: "")
+         stepperCount = "\(Int(stepper.value))"
+         if (stepper.value == 0)
+         {
+            lblRate.text = "$ " + (serviceDetail?.price ?? "0")
+         }
+         else
+         {
+                 if let rate = serviceDetail?.price
+                 {
+                     let totalRate = (Double(rate)!  * stepper.value)
+                     lblRate.text =   "$ \(Int(totalRate))"
+                     totalprice = "\(Int(totalRate))"
+                 }
+         }
+     }
     
     //setData
     func setData(data: BodyDetail)
@@ -121,7 +143,7 @@ class CategoriesDetailVC: CustomController {
         //SetTableViewHeight
         if servicesArray.count > 0
         {
-            ktableViewHeight.constant = (ktableViewHeight.constant * CGFloat(servicesArray.count)) - 120
+            ktableViewHeight.constant = ktableViewHeight.constant + ( CGFloat(servicesArray.count * 38)) 
             tableViewDetail.reloadData()
         }
         else
@@ -132,9 +154,7 @@ class CategoriesDetailVC: CustomController {
     }
     
     //MARK:- Hit Apis
-    
    
-    
     func getCategoriesListApi()
     {
         viewModel?.getServiceDetailApi(ServiceId : selectedId ?? "",completion:
@@ -151,14 +171,25 @@ class CategoriesDetailVC: CustomController {
                 }
         })
     }
+    
+    //addTo Cart
+    func addToCartApi()
+       {
+          
+           let param = AddtoCartInputModel.init(serviceId: selectedServiceId, addressId: "", serviceDateTime: "", orderPrice: serviceDetail?.price, quantity: stepperCount, orderTotalPrice: totalprice)
+           
+           viewModel?.addToCartValidation(param: param)
+           
+       }
     //MARK:- ACTIONS
     @IBAction func ContinueAction(_ sender: Any)
     {
-        let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
-        vc.selectedServiceId = selectedServiceId
-        vc.serviceDetail = self.serviceDetail
-        vc.isFromSubCategoriesList = isFromSubCategoriesList
-        self.navigationController?.pushViewController(vc,animated:false)
+//        let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
+//        vc.selectedServiceId = selectedServiceId
+//        vc.serviceDetail = self.serviceDetail
+//        vc.isFromSubCategoriesList = isFromSubCategoriesList
+//        self.navigationController?.pushViewController(vc,animated:false)
+        addToCartApi()
     }
     @IBAction func btnBackAction(_ sender: Any)
     {
@@ -170,7 +201,7 @@ class CategoriesDetailVC: CustomController {
 extension CategoriesDetailVC : SubCategoriesDelegate
 {
     func Show(msg: String) {
-        
+      showAlertMessage(titleStr: kAppName, messageStr: msg)
     }
     func didError(error: String) {
         

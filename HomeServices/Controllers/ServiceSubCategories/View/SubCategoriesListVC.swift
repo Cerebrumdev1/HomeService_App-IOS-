@@ -18,6 +18,7 @@ class SubCategoriesListVC: UIViewController {
     @IBOutlet weak var tableViewSubCategoriesList: UITableView!
     @IBOutlet weak var kViewSearchHeight: NSLayoutConstraint!
     @IBOutlet weak var imageLocationIcon: UIImageView!
+    @IBOutlet weak var btnCart: CustomButton!
     @IBOutlet weak var txtSearch: UITextField!
     @IBOutlet weak var viewRating: CosmosView!
     @IBOutlet weak var lblNoRecord: UILabel!
@@ -44,6 +45,12 @@ class SubCategoriesListVC: UIViewController {
         self.navigationController?.popViewController(animated: false)
     }
     
+    @IBAction func cartListingAction(_ sender: Any)
+    {
+        let vc = UIStoryboard.init(name: kStoryBoard.order, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.OrderListVC) as! OrderListVC
+        vc.isFromSubCategoriesList = true
+        self.navigationController?.pushViewController(vc,animated:false)
+    }
     //MARK:- Other Functions
     func setView()
     {

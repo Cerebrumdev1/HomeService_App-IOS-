@@ -38,6 +38,8 @@ class Navigation
         case AddNewAddressVC
         case PaymentVC
         case ApplyPromoCodeVC
+        case SuccessVC
+        case CreatedOrderListVC
         
         
         var obj: UIViewController?
@@ -68,25 +70,29 @@ class Navigation
                 return StoryBoards.Main.obj?.instantiateViewController(withIdentifier: "EditProfileVC")
                 
             case .NotificationVC:
-               return StoryBoards.Main.obj?.instantiateViewController(withIdentifier: "NotificationVC")
-           
-                case .SettingVC:
-                    return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "SettingVC")
+                return StoryBoards.Main.obj?.instantiateViewController(withIdentifier: "NotificationVC")
+                
+            case .SettingVC:
+                return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "SettingVC")
                 
                 
             //HOME //AddNewAddressVC
             case .HomeVC:
                 return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "HomeVC")
-           case .AddressListVC:
-                          return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddressListVC")
-             case .AddNewAddressVC:
-                      return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddNewAddressVC")
+            case .AddressListVC:
+                return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddressListVC")
+            case .AddNewAddressVC:
+                return StoryBoards.Home.obj?.instantiateViewController(withIdentifier: "AddNewAddressVC")
             case .PaymentVC:
                 return StoryBoards.Payment.obj?.instantiateViewController(withIdentifier: "PaymentVC")
                 
             case .ApplyPromoCodeVC:
                 return StoryBoards.Order.obj?.instantiateViewController(withIdentifier: "ApplyPromoCodeVC")
-      
+                
+            case .SuccessVC:
+                return StoryBoards.Payment.obj?.instantiateViewController(withIdentifier: "SuccessVC")
+            case .CreatedOrderListVC:
+                return StoryBoards.Order.obj?.instantiateViewController(withIdentifier: "CreatedOrderListVC")
             }
         }
     }
