@@ -57,10 +57,10 @@ class CreatedOrderViewModel
     }
     
     //MARK:- RemoveOrder Api
-    func removeFromCartApi(cartId:String?,completion: @escaping successAddToCartHandler)
+    func cancelOrderAPi(Id:String?,completion: @escaping successAddToCartHandler)
     {
-        let obj : [String:Any] = ["cartId":cartId ?? ""]
-        WebService.Shared.deleteApi(url: APIAddress.deleteToCart + (cartId ?? ""), parameter: obj, Target: self.view, showLoader: true, completionResponse: { (responce) in
+        let obj : [String:Any] = ["orderId ":Id ?? ""]
+        WebService.Shared.deleteApi(url: APIAddress.deleteOrder + (Id ?? ""), parameter: obj, Target: self.view, showLoader: true, completionResponse: { (responce) in
             do
             {
                 let jsonData = try JSONSerialization.data(withJSONObject: responce, options: .prettyPrinted)
@@ -91,6 +91,8 @@ extension CreatedOrderListVC:CreatedOrderViewDelegate{
     
     func didError(error: String)
     {
-           }
+        self.lblNoRecord.isHidden = false
+        self.tableviewOrders.isHidden = true
+    }
     
 }

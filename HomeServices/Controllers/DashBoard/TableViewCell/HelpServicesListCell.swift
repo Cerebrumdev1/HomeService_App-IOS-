@@ -49,7 +49,7 @@ class HelpServicesListCell: UITableViewCell {
         kCollectionHeight.constant = ((kCollectionHeight.constant / 2) * CGFloat(listCount!)) + 78
         collectionViewHelpServiceList.reloadData()
     }
-    
+   
 }
 
 //MARK:- CollectionView DataSource and Delegate
@@ -71,13 +71,18 @@ extension HelpServicesListCell:UICollectionViewDelegate,UICollectionViewDataSour
    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
+        if servicesList[indexPath.row].cart?.id != ""{
          if let cell = collectionView.cellForItem(at: indexPath) as? ServiceHelpCollectionCell {
                        cell.viewBack.dropShadow(radius: 20)
                     cell.viewBack.backgroundColor = UIColor.init(netHex: 0xFFA400)//UIColor.init(hex: KColors.kOrangeColor)
                        cell.viewBack.layer.borderWidth = 0.6
                        cell.viewBack.layer.borderColor = UIColor.white.cgColor
                    }
-                   delegateService?.otherServicesDetail(index:indexPath.row)
+        }
+        else{
+        
+        }
+        delegateService?.otherServicesDetail(index:indexPath.row)
     }
        
        func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)

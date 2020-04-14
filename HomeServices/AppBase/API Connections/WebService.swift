@@ -84,7 +84,8 @@ class WebService
                         
                         if  statusCode == 401
                         {
-                            Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                            //Target.showErrorMessage(titleStr: kAppName, messageStr:message)
+                             completionnilResponse(message)
                         }
                         else if statusCode == 403
                         {
@@ -312,7 +313,7 @@ class WebService
             
             
             print(AppDefaults.shared.userJWT_Token)
-            Alamofire.request(urlComplete, method: .delete, parameters: nil, encoding: URLEncoding.default, headers : headers)
+            Alamofire.request(urlComplete, method: .delete, parameters: parameter, encoding: URLEncoding.default, headers : headers)
                 .responseJSON { response in
                     
                     if (showLoader == true)

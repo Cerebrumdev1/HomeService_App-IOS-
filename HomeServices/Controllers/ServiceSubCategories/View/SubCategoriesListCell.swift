@@ -38,7 +38,7 @@ class SubCategoriesListCell: UITableViewCell {
         lblRate.text = "$ " + (categoriesList.price ?? "")
         if let url = categoriesList.thumbnail
         {
-          self.imageViewService.setImage(with: url, placeholder: "image")
+            self.imageViewService.setImage(with: url, placeholder: KImages.kNoImage)
         }
         btnRepair.setTitle(categoriesList.name ?? "Repair", for: .normal)
         lblPerPrice.text = "/" + (categoriesList.type ?? "")

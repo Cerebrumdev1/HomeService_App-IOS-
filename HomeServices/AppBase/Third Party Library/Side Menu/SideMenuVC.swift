@@ -53,9 +53,9 @@ class SideMenuVC: BaseUIViewController,UIActionSheetDelegate
     //MARK:- Other functions
     func SetUI()
     {
-        sideMenu = ["Home","Profile","Addresses","Orders","Notifications","Settings","Help", "Logout"]
+        sideMenu = ["Home","Profile","Addresses","Orders","Bookings","Notifications","Settings","Help", "Logout"]
         
-        sideMenuImg  = ["home","profile2","address","settings","notification","settings","help","logout"]
+        sideMenuImg  = ["homeSideBar","profile2","address","ordersList","booking","notification","settings","help","logout"]
         
         tableViewMenu.dataSource = self
         tableViewMenu.delegate = self
@@ -145,11 +145,20 @@ extension SideMenuVC : UITableViewDelegate
             
         case 3:
             let controller = Navigation.GetInstance(of: .CreatedOrderListVC) as! CreatedOrderListVC
+            controller.approach = "orderList"
             let frontVC = revealViewController().frontViewController as? UINavigationController
             frontVC?.pushViewController(controller, animated: false)
             revealViewController().pushFrontViewController(frontVC, animated: true)
             break
+            
         case 4:
+            let controller = Navigation.GetInstance(of: .CreatedOrderListVC) as! CreatedOrderListVC
+            controller.approach = "bookings"
+            let frontVC = revealViewController().frontViewController as? UINavigationController
+            frontVC?.pushViewController(controller, animated: false)
+            revealViewController().pushFrontViewController(frontVC, animated: true)
+            break
+        case 5:
             let controller = Navigation.GetInstance(of: .NotificationVC) as! NotificationVC
             let frontVC = revealViewController().frontViewController as? UINavigationController
             frontVC?.pushViewController(controller, animated: false)
@@ -157,7 +166,7 @@ extension SideMenuVC : UITableViewDelegate
             
             break
             
-        case 5:
+        case 6:
             let controller = Navigation.GetInstance(of: .SettingVC) as! SettingVC
             let frontVC = revealViewController().frontViewController as? UINavigationController
             frontVC?.pushViewController(controller, animated: false)
@@ -165,12 +174,12 @@ extension SideMenuVC : UITableViewDelegate
             
             break
             
-        case 6:
+        case 7:
             showAlertMessage(titleStr: kAppName, messageStr: "Coming Soon")
             
             break
             
-        case 7:
+        case 8:
             self.logout_app()
             
             break

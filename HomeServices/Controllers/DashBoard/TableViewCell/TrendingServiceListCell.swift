@@ -65,7 +65,6 @@ extension TrendingServiceListCell:UICollectionViewDataSource,UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
         self.delegateTrendingService?.trendingServicesDetail(index:indexPath.row)
-        
     }
     
 

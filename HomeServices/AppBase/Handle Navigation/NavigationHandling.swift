@@ -40,7 +40,7 @@ class Navigation
         case ApplyPromoCodeVC
         case SuccessVC
         case CreatedOrderListVC
-        
+        case ChooseAddressVC
         
         var obj: UIViewController?
         {
@@ -93,6 +93,9 @@ class Navigation
                 return StoryBoards.Payment.obj?.instantiateViewController(withIdentifier: "SuccessVC")
             case .CreatedOrderListVC:
                 return StoryBoards.Order.obj?.instantiateViewController(withIdentifier: "CreatedOrderListVC")
+            case .ChooseAddressVC:
+                return StoryBoards.Appointment.obj?.instantiateViewController(withIdentifier: "ChooseAddressVC")
+                
             }
         }
     }
@@ -102,6 +105,7 @@ class Navigation
         case Home
         case Payment
         case Order
+        case Appointment
         
         var obj: UIStoryboard?
         {
@@ -115,15 +119,19 @@ class Navigation
                 return UIStoryboard(name: "Payment", bundle: nil)
             case .Order:
                 return UIStoryboard(name: "Order", bundle: nil)
+            case .Appointment:
+                return UIStoryboard(name: "Appointment", bundle: nil)
             }
-        }
+            
         
     }
     
-    static func GetInstance(of controller : Controller) -> UIViewController
-    {
-        return controller.obj!
-    }
-    
+}
+
+static func GetInstance(of controller : Controller) -> UIViewController
+{
+    return controller.obj!
+}
+
 }
 

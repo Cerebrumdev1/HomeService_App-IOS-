@@ -30,13 +30,12 @@ class PaymentViewModel
     }
     
     //MARK: - Create Order Api
-    func createOrderApi(serviceId:String?,addressId:String?,serviceDateTime:String?,orderPrice:String?,serviceCharges:String?,promoCode:String?,completion: @escaping successAddToCartHandler)
+    func createOrderApi(addressId:String?,serviceDateTime:String?,orderPrice:String?,promoCode:String?,completion: @escaping successAddToCartHandler)
     {
-        let obj : [String:Any] = ["serviceId":serviceId ?? "",
+        let obj : [String:Any] = [
                                   "addressId" :addressId ?? "",
                                   "serviceDateTime":serviceDateTime ?? "",
                                   "orderPrice":orderPrice ?? "",
-                                  "serviceCharges":serviceCharges ?? "",
                                   "promoCode" :promoCode ?? ""]
         
         WebService.Shared.PostApi(url: APIAddress.createOrder, parameter: obj, Target: self.view, completionResponse: { (response) in

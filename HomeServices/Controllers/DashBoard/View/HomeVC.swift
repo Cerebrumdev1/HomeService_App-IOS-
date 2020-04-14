@@ -35,6 +35,7 @@ class HomeVC: UIViewController {
     var servicesList = [Service]()
     var isFirstTimeCallDelegate = false
     var cartList = [CartListingModel.Datum]()
+    var isCartAdded = false
     public  static var isSideMenueSelected:Bool?
     
     //MARK:- Life Cycle Methods
@@ -48,6 +49,7 @@ class HomeVC: UIViewController {
         super.viewWillAppear(true)
         
         unHideNAV_BAR(controller: self)
+        getServices()
         if HomeVC.isSideMenueSelected == true{
             // self.setTapGestureOnSWRevealontroller(view: self.view, controller: self)
             
@@ -57,6 +59,7 @@ class HomeVC: UIViewController {
         }
     }
     
+    
     //MARK:- Other functions
     func setView()
     {
@@ -65,7 +68,7 @@ class HomeVC: UIViewController {
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         self.viewModel = HomeViewModel.init(Delegate: self, view: self)
-        getServices()
+        
         
         DispatchQueue.main.async {
             self.tableView.delegate = self
@@ -73,7 +76,12 @@ class HomeVC: UIViewController {
         }
         tableView.separatorStyle = .none
         //viewSearch.dropShadow(radius: 8.0)
-        
+        if isCartAdded == true{
+            self.btnCart.isHidden = false
+        }
+        else{
+            self.btnCart.isHidden = true
+        }
     }
     
     //MARK:- Hit API
@@ -96,23 +104,6 @@ class HomeVC: UIViewController {
             self.tableView.reloadData()
         })
     }
-    //cartList
-    func getCartList()
-       {
-           viewModel?.getCartListApi(completion: { (responce) in
-               print(responce)
-               if let cartListData = responce.body{
-                   if cartListData.data.count > 0
-                   {
-                    self.cartList = cartListData.data
-                    self.btnCart.isHidden = false
-                   }
-                   else{
-                    self.btnCart.isHidden = true
-                }
-               }
-           })
-       }
     
     //MARK:-Tap gesture for swrevealcontroller
     func setTapGestureOnSWRevealontroller(view: UIView,controller: UIViewController)
@@ -212,6 +203,14 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource
                 
                 if self.trendingServicesList.count > 0
                 {
+                    if let cartData = self.trendingServicesList[indexPath.row].cart?.id
+                    {
+                        if cartData != ""
+                        {
+                            isCartAdded = true
+                            
+                        }
+                    }
                     lblNoTrendingServices.isHidden = true
                     cell.collectionViewTrendingServiceList.isHidden = false
                     cell.delegateTrendingService = self
@@ -231,6 +230,15 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource
             {
                 cell.servicesList = self.servicesList
                 if self.servicesList.count > 0{
+                    if let cartData = self.servicesList[indexPath.row].cart?.id
+                    {
+                        if cartData != ""
+                        {
+                            isCartAdded = true
+                            btnCart.isHidden = false
+                            
+                        }
+                    }
                     if isFirstTimeCallDelegate == false{
                         isFirstTimeCallDelegate = true
                         cell.setView()
@@ -257,7 +265,6 @@ extension HomeVC:UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
     
 }
@@ -267,18 +274,29 @@ extension HomeVC : ServicesDetailDelegate
 {
     //MARK:- DetailOFTrendingServices
     func trendingServicesDetail(index: Int?) {
-        let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
-        vc.selectedId = self.trendingServicesList[index ?? 0].id!
-        vc.isFromSubCategoriesList = false
-        self.navigationController?.pushViewController(vc,animated:false)
+        
+        if trendingServicesList[index ?? 0].cart?.id != "" && trendingServicesList[index ?? 0].cart?.id != nil{
+            let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.CategoriesDetailVC) as! CategoriesDetailVC
+            vc.selectedId = self.trendingServicesList[index ?? 0].id!
+            vc.isFromSubCategoriesList = false
+            self.navigationController?.pushViewController(vc,animated:false)
+        }
+        else{
+            showAlertMessage(titleStr: kAppName, messageStr: "Items are present in cart list,for add new services fist remove it")
+        }
     }
     
     //MARK:- DetailOFOtherServices
     func otherServicesDetail(index: Int?)
     {
-        let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.SubCategoriesListVC) as! SubCategoriesListVC
-        vc.selectedId = self.servicesList[index ?? 0].id!
-        self.navigationController?.pushViewController(vc,animated:false)
+        if servicesList[index ?? 0].cart?.id != "" && servicesList[index ?? 0].cart?.id != nil{
+            let vc = UIStoryboard.init(name: kStoryBoard.Home, bundle: nil).instantiateViewController(withIdentifier: HomeIdentifiers.SubCategoriesListVC) as! SubCategoriesListVC
+            vc.selectedId = self.servicesList[index ?? 0].id!
+            self.navigationController?.pushViewController(vc,animated:false)
+        }
+        else{
+            showAlertMessage(titleStr: kAppName, messageStr: "Items are present in cart list,for add new services fist remove it")
+        }
     }
     
 }

@@ -24,12 +24,15 @@ target 'HomeServices' do
   pod 'Firebase/Auth'
   #pod 'Firebase/Analytics'
   pod 'Firebase/Messaging'
+pod 'lottie-ios'
   
   pod 'GoogleMaps'
   pod 'GooglePlaces'
   pod 'SkeletonView'
   pod 'iOSDropDown'
   pod 'SwiftyJSON'
+  pod 'CryptoSwift'
+  pod 'PayUmoney_PnP'
 
   target 'HomeServicesTests' do
     inherit! :search_paths

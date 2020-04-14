@@ -15,6 +15,7 @@ protocol AppointmentVCDelegate
     func didError(error:String)
     func Show_results(msg: String)
     func addCarSuccess(msg:String)
+    func addressEror(msg:String)
 }
 
 class Appontment_ViewModel
@@ -52,6 +53,7 @@ class Appontment_ViewModel
             
         }, completionnilResponse: {(error) in
             // self.view.showAlertMessage(titleStr: kAppName, messageStr: error)
+            self.delegate.addressEror(msg: error)
         })
         
     }
@@ -123,21 +125,33 @@ class Appontment_ViewModel
     }
     
     //MARK:- Get Schedule list
-    func getSchedule(selectedDay:String?,selectedId:String?,completion: @escaping successHandler)
+    func getSchedule(selectedDay:String?,bookings:String?,completion: @escaping successHandler)
     {
-        WebService.Shared.GetApi(url: APIAddress.Get_Schedule + (selectedId ?? "") + APIAddress.getScheduleParm + (selectedDay ?? ""), Target: self.view, showLoader: true, completionResponse: { (response) in
+        //(selectedId ?? "") + APIAddress.getScheduleParm + 
+        WebService.Shared.GetApi(url: APIAddress.Get_Schedule + (selectedDay ?? "") + APIAddress.bookings + (bookings ?? ""), Target: self.view, showLoader: true, completionResponse: { (response) in
             print(response)
-            if let responseData  = response as? [String : Any]
-            {
-                self.GetScheduleJSON(data: responseData, completionResponse: { (addedMember) in
-                    completion(addedMember)
-                }, completionError: { (error) in
-                    
-                })
-            }
-            else{
-                
-            }
+//            if let responseData  = response as? [String : Any]
+//            {
+//                self.GetScheduleJSON(data: responseData, completionResponse: { (addedMember) in
+//                    completion(addedMember)
+//                }, completionError: { (error) in
+//
+//                })
+//            }
+//            else{
+//
+//            }
+            do
+                        {
+                            let jsonData = try JSONSerialization.data(withJSONObject: response, options: .prettyPrinted)
+                            let getAllListResponse = try JSONDecoder().decode(AppointmentModel.self, from: jsonData)
+                            completion(getAllListResponse)
+                        }
+                        catch
+                        {
+                            print(error.localizedDescription)
+                            self.view.showAlertMessage(titleStr: kAppName, messageStr: error.localizedDescription)
+                        }
             
         }, completionnilResponse: {(error) in
             self.delegate.didError(error: error)
@@ -236,11 +250,11 @@ class Appontment_ViewModel
         })
     }
     
-    //MARK:- GetScheduleJSON
-    private func GetScheduleJSON(data: [String : Any],completionResponse:  @escaping (AppointmentModel) -> Void,completionError: @escaping (String?) -> Void)
-    {
-        let addedMembersData = AppointmentModel(dict: data)
-        completionResponse(addedMembersData)
-        
-    }
+//    //MARK:- GetScheduleJSON
+//    private func GetScheduleJSON(data: [String : Any],completionResponse:  @escaping (AppointmentModel) -> Void,completionError: @escaping (String?) -> Void)
+//    {
+//        let addedMembersData = AppointmentModel(dict: data)
+//        completionResponse(addedMembersData)
+//        
+//    }
 }

@@ -51,6 +51,9 @@ class AppointmentDetailVC: CustomController {
     @IBOutlet weak var lblApplyCoupon: UILabel!
     @IBOutlet weak var kLblApplyCouponWdith: NSLayoutConstraint!
     @IBOutlet weak var kOldlPriceWidth: NSLayoutConstraint!
+    @IBOutlet var imageMarker: UIImageView!
+    @IBOutlet var lblAddressType: UILabel!
+    @IBOutlet weak var btnChangeAddress: CustomButton!
     
     var viewModel:Appontment_ViewModel?
     var calendarArray : NSArray?
@@ -77,9 +80,10 @@ class AppointmentDetailVC: CustomController {
     var dayAndDate :String?
     var timeOfCart :String?
     var couponId:String?
-    var totalPrice : String?
+    var totalPrice,totalQuantity : String?
     var cartList:CartListingModel.Body?
     var promocode : String?
+    
     
     //MARK:- life Cycle methods
     override func viewDidLoad() {
@@ -94,41 +98,63 @@ class AppointmentDetailVC: CustomController {
     }
     //MARK:- Actions
     @IBAction func removePromoCodeAction(_ sender: Any) {
-           self.AlertMessageWithOkCancelAction(titleStr: kAppName, messageStr: "Do you want to delete this coupon?", Target: self)
-           { (actn) in
-               if (actn == KYes)
-               {
-                   self.removeCouponApi(id:self.couponId)
-               }
-           }
-       }
-        @IBAction func applyCouponAction(_ sender: Any)
-       {
-           let controller = Navigation.GetInstance(of: .ApplyPromoCodeVC) as! ApplyPromoCodeVC
-           controller.viewDelegate = self
-           self.present_To_Controller(from_controller: self, to_Controller: controller)
-       }
+        self.AlertMessageWithOkCancelAction(titleStr: kAppName, messageStr: "Do you want to delete this coupon?", Target: self)
+        { (actn) in
+            if (actn == KYes)
+            {
+                self.removeCouponApi(id:self.couponId)
+            }
+        }
+    }
+    @IBAction func applyCouponAction(_ sender: Any)
+    {
+        let controller = Navigation.GetInstance(of: .ApplyPromoCodeVC) as! ApplyPromoCodeVC
+        controller.viewDelegate = self
+        self.present_To_Controller(from_controller: self, to_Controller: controller)
+    }
     @IBAction func btnBackAction(_ sender: Any)
     {
         self.navigationController?.popViewController(animated: false)
     }
     
     @IBAction func changeAddress(_ sender: Any) {
-        viewAddressBack.isHidden = false
-        viewTableBack.isHidden = false
+        //        viewAddressBack.isHidden = false
+        //        viewTableBack.isHidden = false
+        let controller = Navigation.GetInstance(of: .ChooseAddressVC) as! ChooseAddressVC
+        controller.modalPresentationStyle = .overCurrentContext
+        controller.apiDATA = self.apiDATA
+        controller.delegateCheckout = self
+        present(controller, animated: true, completion: nil)
     }
     @IBAction func ContinueAction(_ sender: Any)
     {
-//        if isEdited == true{
-//            updateCartApi()
-//        }
-//        else{
-//            addToCartApi()
-//        }
+        //        if isEdited == true{
+        //            updateCartApi()
+        //        }
+        //        else{
+        //            addToCartApi()
+        //        }
+        let dateTime = (serviceDate ?? "") + " " + (serviceTime ?? "")
+            let dateFormatterGet = DateFormatter()
+            //Fri Apr 3 2020 2:00 PM
+            dateFormatterGet.dateFormat = "E, MMM d yyyy h:mm a"
+            //MonthFormateWithDay
+            let dateFormatterMonth = DateFormatter()
+            //2020-03-30 14:00:00
+            dateFormatterMonth.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            if let date = dateFormatterGet.date(from: dateTime)
+            {
+                serviceDateTime = dateFormatterMonth.string(from: date)
+            } else {
+                print("There was an error decoding the string")
+            }
+        
         let controller = Navigation.GetInstance(of: .PaymentVC) as! PaymentVC
         controller.cartList = self.cartList
         controller.addressId = self.addressId
         controller.promoCode = promocode
+        controller.serviceDateTime = serviceDateTime
         self.push_To_Controller(from_controller: self, to_Controller: controller)
     }
     @IBAction func AddAddressAction(_ sender: Any)
@@ -211,9 +237,11 @@ class AppointmentDetailVC: CustomController {
         //setColor
         btnContinue.backgroundColor = Appcolor.kTheme_Color
         btnAddress.layer.borderColor = AppButtonColor.kBlueColor.cgColor
-        viewAddedAddress.layer.borderColor = AppButtonColor.kBlueColor.cgColor
+        viewAddedAddress.layer.borderColor = UIColor.darkGray.cgColor//AppButtonColor.kBlueColor.cgColor
         btnContinue.setTitleColor(Appcolor.kTextColorBlack, for: .normal)
-        btnAddress.setTitleColor(Appcolor.kTextColorWhite, for: .normal)
+        btnAddress.setTitleColor(AppButtonColor.kBlueColor, for: .normal)
+        btnChangeAddress.backgroundColor = AppButtonColor.kBlueColor
+        btnChangeAddress.setTitleColor(Appcolor.kTextColorWhite, for: .normal)
         
         if(isEdited == true)
         {
@@ -310,15 +338,15 @@ class AppointmentDetailVC: CustomController {
     
     func addCoupon_Animation()
     {
-        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseOut, animations: {
-            //  self.lblApplyCoupon.frame = CGRect(x:  80, y: 123, width: 160, height: 12)
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
             self.kLblApplyCouponWdith.constant = 200
             self.kOldlPriceWidth.constant = 50
             self.kRemoveButtonWidth.constant = 65
             self.imageArrow.isHidden = true
+            self.kLblApplyCouponWdith.constant = 200
             self.btnApplyCoupon.isUserInteractionEnabled = false
-            self.lblApplyCoupon.text =  "Coupon Applied: (New)"
-            
+            self.lblApplyCoupon.text =  "Coupon Applied : (\(self.promocode ?? ""))"
+            //self.btnApplyCoupon.setTitle("Coupon Applied : (\(self.promocode ?? ""))", for: .normal)
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
@@ -328,20 +356,20 @@ class AppointmentDetailVC: CustomController {
     func removeCoupon_Animation()
     {
         
-        UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
             self.lblTotalPrice.text = self.totalPrice
-            self.kLblApplyCouponWdith.constant = 0
+            
             self.kOldlPriceWidth.constant = 0
             self.kRemoveButtonWidth.constant = 0
             self.imageArrow.isHidden = false
             self.btnApplyCoupon.isUserInteractionEnabled = true
-            OrderListVC.isCodeApplied = false
+            self.kLblApplyCouponWdith.constant = 100
+            self.lblApplyCoupon.text =  "Apply Coupon"
             self.view.layoutIfNeeded()
         }, completion: nil)
         
         UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseOut, animations: {
-            self.kLblApplyCouponWdith.constant = 100
-            self.lblApplyCoupon.text =  "Apply Coupon"
+            
             
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -376,43 +404,44 @@ class AppointmentDetailVC: CustomController {
             if let cartListData = responce.body{
                 self.cartList = cartListData
                 if cartListData.data.count > 0{
-                self.couponId = cartListData.data[0].promoCode
-                    
+                    self.couponId = cartListData.data[0].promoCode
+                    self.promocode = cartListData.data[0].promoCode
                 }
-                    self.totalPrice = "\(responce.body?.totalQunatity ?? 0)"//"$ \(responce.body?.sum ?? 0)"
-                    //setData
-                    // self.lblItemCount.text = "Items ( \(responce.body?.totalQunatity ?? 0) )"
-                    self.lblitemQuantity.text = "\(cartListData.totalQunatity ?? 0)"
-                    
+                self.totalPrice = "$ \(responce.body?.sum ?? 0)"
+                //setData
+                // self.lblItemCount.text = "Items ( \(responce.body?.totalQunatity ?? 0) )"
+                self.lblitemQuantity.text = "\(cartListData.totalQunatity ?? 0)"
+                
                 if (cartListData.payableAmount != nil && cartListData.payableAmount != 0){
                     self.lblTotalPrice.text = "$ \(cartListData.payableAmount ?? 0)"
                     let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "$ \(cartListData.sum ?? 0)")
-                        attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
-                        
-                        self.lblOldPrice.attributedText = attributeString
-                        
-                        self.addCoupon_Animation()
-                    }
-                    else{
-                        self.lblTotalPrice.text = "$ \(responce.body?.sum ?? 0)"
-                        
-                    }
+                    attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+                    
+                    self.lblOldPrice.attributedText = attributeString
+                    
+                    self.addCoupon_Animation()
+                }
+                else{
+                    self.lblTotalPrice.text = "$ \(responce.body?.sum ?? 0)"
+                    
+                }
             }
             
         })
     }
     //RemoveCoupon Api
-     func removeCouponApi(id: String?){
-         viewModel?.removeCouponApi(Id: id, completion: { (responce) in
-             self.AlertMessageWithOkAction(titleStr: kAppName, messageStr: responce.message ?? "", Target: self) {
-                 self.getCartList()
-                 // self.removeCoupon_Animation()
-             }
-         })
-     }
+    func removeCouponApi(id: String?){
+        viewModel?.removeCouponApi(Id: id, completion: { (responce) in
+            self.AlertMessageWithOkAction(titleStr: kAppName, messageStr: responce.message ?? "", Target: self) {
+                //self.getCartList()
+                self.promocode = ""
+                self.removeCoupon_Animation()
+            }
+        })
+    }
     func updateCartApi()
     {
-        let dateTime = (serviceDate ?? "") + " " + "2:00 PM"
+        let dateTime = (serviceDate ?? "") + " " + (serviceTime ?? "")
         let dateFormatterGet = DateFormatter()
         //Fri Apr 3 2020 2:00 PM
         dateFormatterGet.dateFormat = "E, MMM d yyyy h:mm a"
@@ -558,32 +587,32 @@ class AppointmentDetailVC: CustomController {
     //getSchedule
     func getScheduleApi(date : String?)
     {
-        self.viewModel?.getSchedule(selectedDay: date, selectedId: selectedServiceId ?? "", completion: { (responce) in
+        self.viewModel?.getSchedule(selectedDay: date, bookings:totalQuantity, completion: { (responce) in
             print(responce)
             
             self.lblNoTimeSlot.isHidden = true
             self.collectionViewTimeSlot.isHidden = false
             self.btnContinue.isHidden = false
             
-            if let timeArray = responce.body?.time{
+            if let timeArray = responce.body.slots{
                 var selected:Bool?
                 self.timeSlotArray.removeAll()
                 for timeList in timeArray{
                     if self.isTimeSlotCallFirst == false{
                         selected = true
                         self.isTimeSlotCallFirst = true
-                        self.serviceTime = timeList
+                        self.serviceTime = timeList.slot
                     }
                     else{
                         selected = false
                     }
-                    let newModel = TimeSlotModel(time: timeList, isSelected: selected)
+                    let newModel = TimeSlotModel(time: timeList.slot, isSelected: selected)
                     self.timeSlotArray.append(newModel)
                 }
                 self.collectionViewTimeSlot.reloadData()
             }
             
-            if let leaveDays = responce.body?.leave{
+            if let leaveDays = responce.body.leaves{
                 self.leaveDaysArray = leaveDays
                 var daysInList:String?
                 var index = 0
@@ -817,6 +846,11 @@ extension AppointmentDetailVC:UICollectionViewDataSource,UICollectionViewDelegat
 //MARK:- ViewDelegate
 extension AppointmentDetailVC  : AppointmentVCDelegate
 {
+    func addressEror(msg: String) {
+        btnAddress.isHidden = false
+        viewAddedAddress.isHidden = true
+    }
+    
     func addCarSuccess(msg: String) {
         self.showAlert_Message(titleStr: kAppName, messageStr: msg)
     }
@@ -830,39 +864,52 @@ extension AppointmentDetailVC  : AppointmentVCDelegate
         //showAlertMessage(titleStr: kAppName, messageStr: error)
         lblNoTimeSlot.isHidden = false
         collectionViewTimeSlot.isHidden = true
-       // btnContinue.isHidden = true
+        // btnContinue.isHidden = true
     }
     
     func getData(model: [AddressList_Result]) {
         if (model.count > 0)
         {
-//            if stepperCount != "0"
-//            {
-                btnAddress.isHidden = true
-                viewAddedAddress.isHidden = false
-//            }
-//            else
-//            {
-//                btnAddress.isHidden = true
-//                viewAddedAddress.isHidden = true
-//            }
+            //            if stepperCount != "0"
+            //            {
+            btnAddress.isHidden = true
+            viewAddedAddress.isHidden = false
+            //            }
+            //            else
+            //            {
+            //                btnAddress.isHidden = true
+            //                viewAddedAddress.isHidden = true
+            //            }
             self.apiDATA = model
-            self.tableViewAddress.reloadData()
+            // self.tableViewAddress.reloadData()
             lblAddress.text =  apiDATA?[0].addressName
             addressId = apiDATA?[0].id
+            self.lblAddressType.text = apiDATA?[0].addressType
+            if (apiDATA?[0].addressType == "Home")
+            {
+                self.imageMarker.image = UIImage(named:"home")
+            }
+            else if (apiDATA?[0].addressType == "Work")
+            {
+                self.imageMarker.image = UIImage(named:"work")
+            }
+            else
+            {
+                self.imageMarker.image = UIImage(named:"other")
+            }
         }
         else
         {
-//            if stepperCount != "0"
-//            {
-                btnAddress.isHidden = false
-                viewAddedAddress.isHidden = true
-//            }
-//            else
-//            {
-//                btnAddress.isHidden = true
-//                viewAddedAddress.isHidden = true
-//            }
+            //            if stepperCount != "0"
+            //            {
+            btnAddress.isHidden = false
+            viewAddedAddress.isHidden = true
+            //            }
+            //            else
+            //            {
+            //                btnAddress.isHidden = true
+            //                viewAddedAddress.isHidden = true
+            //            }
         }
     }
     
@@ -906,6 +953,7 @@ extension AppointmentDetailVC:CartListDelegate
     func callBack(data:ApplyCouponModel.Body)
     {
         //couponId = data.coupanCode
+        promocode = data.coupanCode
         getCartList()
     }
     
@@ -913,3 +961,27 @@ extension AppointmentDetailVC:CartListDelegate
     }
 }
 
+extension AppointmentDetailVC : UpdateAddressOnCheckout_Delegate
+{
+    func addressFound(addrss:String,type:String,adrssID:String)
+    {
+        self.lblAddress.text = addrss
+        self.lblAddressType.text = type
+        self.addressId = adrssID
+        
+        if (type == "Home")
+        {
+            self.imageMarker.image = UIImage(named:"home")
+        }
+        else if (type == "Work")
+        {
+            self.imageMarker.image = UIImage(named:"work")
+        }
+        else
+        {
+            self.imageMarker.image = UIImage(named:"other")
+        }
+    }
+    
+    
+}

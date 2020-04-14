@@ -16,6 +16,7 @@ class CellClass_AddressList: UITableViewCell
     @IBOutlet var lblType: UILabel!
     @IBOutlet var lblLocation: UILabel!
     @IBOutlet var btnDelete: UIButton!
+    @IBOutlet weak var imageViewMarker: UIImageView!
     
     override func awakeFromNib()
     {

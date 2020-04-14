@@ -112,7 +112,7 @@ class AddressListVC: CustomController
         {
             if (self.apiDATA?.count == 0)
             {
-               self.tableView_List.setEmptyMessage("Addresses Not Available!")
+                self.tableView_List.setEmptyMessage("Addresses Not Available!")
             }
             self.tableView_List.reloadData()
         }
@@ -173,6 +173,18 @@ extension AddressListVC : UITableViewDelegate,UITableViewDataSource
             else
             {
                 cell.btnDefault.setBackgroundImage(UIImage(named: "radio_selected"), for: .normal)
+            }
+            if (data.addressType == "Home")
+            {
+                cell.imageViewMarker.image = UIImage(named:"home")
+            }
+            else if (data.addressType == "Work")
+            {
+                cell.imageViewMarker.image = UIImage(named:"work")
+            }
+            else
+            {
+                cell.imageViewMarker.image = UIImage(named:"other")
             }
         }
         else

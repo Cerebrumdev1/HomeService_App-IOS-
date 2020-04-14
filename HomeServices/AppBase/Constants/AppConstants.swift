@@ -116,7 +116,7 @@ struct database
 struct APIAddress
 {
     
-    static let BASE_URL = "http://51.79.40.224:9061/api/mobile/"//"http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
+    static let BASE_URL =  "http://51.79.40.224:9062/api/mobile/"//"http://camonher.infinitywebtechnologies.com:9065/api/mobile/"
    // static let BASE_URL = "http://10.8.23.202:9062/"
     
     static let CHECK_PHONE_NUMBER = BASE_URL + "driver/auth/checkPhoneNumber"
@@ -131,8 +131,8 @@ struct APIAddress
     static let UPDATE_ADDRESS = BASE_URL + "address/update" //DELETE_ADDRESS
     static let DELETE_ADDRESS = BASE_URL + "address/delete"
     static let ADD_ADDRESS = BASE_URL + "address/add"
-    static let Get_Schedule = BASE_URL + "schedule/getSchedule?serviceId="
-    static let getScheduleParm = "&serviceDate="
+    static let Get_Schedule = BASE_URL + "schedule/getSchedule?serviceDate="
+    static let bookings = "&bookings="
     static let getCartList = BASE_URL + "cart/list"
     static let getServiceCategories = "services/getCategories"
     static let getSubCategoriesList = "services/getServices/"
@@ -150,6 +150,7 @@ struct APIAddress
     static let orderList = BASE_URL + "orders/list?progressStatus="
     static let page = "&page="
     static let limit = "&limit="
+    static let deleteOrder = BASE_URL + "orders/delete?orderId="
 }
 
 //MARK- APIParam
@@ -322,6 +323,7 @@ extension String
 //MARK:- IMAGES
 struct KImages {
     static let KDefaultIcon = "backGroundIcon"
+    static let kNoImage = "noImageIcon"
 }
 
 //MARK:- COLORS

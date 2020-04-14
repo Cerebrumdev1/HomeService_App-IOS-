@@ -42,7 +42,7 @@ class OrderListVC: UIViewController {
     var row = 0
     public static var isCodeApplied = false
     var couponId:String?
-    var totalPrice : String?
+    var totalQunatity : String?
     
     //MARK:- Life cycle methods
     override func viewDidLoad() {
@@ -52,14 +52,7 @@ class OrderListVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if OrderListVC.isCodeApplied == true{
-            addCoupon_Animation()
-        }
-        else{
-            
-        }
-        
+      getCartList()
     }
     
     //MARK:- Other functions
@@ -84,7 +77,7 @@ class OrderListVC: UIViewController {
         btnCheckOut.setTitleColor(Appcolor.kTextColorBlack, for: .normal)
         
         self.kOldlPriceWidth.constant = 0
-        getCartList()
+        
     }
     
     //MARK:- AddCoupon_Animation
@@ -110,7 +103,7 @@ class OrderListVC: UIViewController {
     {
         
         UIView.animate(withDuration: 0.5, delay: 0.3, options: .curveEaseIn, animations: {
-            self.lblTotalPrice.text = self.totalPrice
+           // self.lblTotalPrice.text = self.totalPrice
             self.kLblApplyCouponWdith.constant = 0
             self.kOldlPriceWidth.constant = 0
             self.kRemoveButtonWidth.constant = 0
@@ -147,7 +140,7 @@ class OrderListVC: UIViewController {
                     self.viewTotalPrice.isHidden = false
                     self.couponId = cartListData[0].promoCode
                     self.cartList = cartListData
-                    self.totalPrice = "\(responce.body?.totalQunatity ?? 0)"//"$ \(responce.body?.sum ?? 0)"
+                    self.totalQunatity = "\(responce.body?.totalQunatity ?? 0)"//"$ \(responce.body?.sum ?? 0)"
                     self.lblNoRecord.isHidden = true
                     self.tableViewOrder.isHidden = false
                     self.tableViewOrder.reloadData()
@@ -222,8 +215,7 @@ class OrderListVC: UIViewController {
         //        let controller = Navigation.GetInstance(of: .PaymentVC) as! PaymentVC
         //        self.push_To_Controller(from_controller: self, to_Controller: controller)
         let vc = UIStoryboard.init(name: kStoryBoard.appointment, bundle: nil).instantiateViewController(withIdentifier: AppointmentDetailIdentifiers.AppointmentDetailVC) as! AppointmentDetailVC
-       // vc.selectedServiceId = selectedServiceId
-        //vc.serviceDetail = self.serviceDetail
+        vc.totalQuantity = self.totalQunatity
         vc.isFromSubCategoriesList = isFromSubCategoriesList
         self.navigationController?.pushViewController(vc,animated:false)
     }

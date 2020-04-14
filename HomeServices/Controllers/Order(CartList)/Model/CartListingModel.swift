@@ -19,7 +19,7 @@ struct CartListingModel: Codable {
     // MARK: - Body
     struct Body: Codable
     {
-        let discount, payableAmount, sum, totalQunatity: Int?
+        let discount, payableAmount, sum, totalQunatity: Double?
         let data: [Datum]
     }
     // MARK: - Datum

@@ -20,7 +20,10 @@ internal struct Body: Codable {
     }
 }
 
-
+// MARK: - Cart
+struct Cart: Codable {
+    let id: String
+}
 
 // MARK: - Banner
 struct Banner: Codable {
@@ -34,6 +37,7 @@ struct Service: Codable {
     let thumbnail : String?
     let name: String?
     let icon: String?
+    let cart: Cart?
 }
 
 // MARK: - TrendingService
@@ -42,6 +46,7 @@ struct TrendingService: Codable {
     let name: String?
     let thumbnail : String?
     let icon: String?
+    let cart: Cart?
 }
 
 //MARK:- Customize Service

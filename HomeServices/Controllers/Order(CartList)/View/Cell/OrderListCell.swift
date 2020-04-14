@@ -65,7 +65,7 @@ class OrderListCell: UITableViewCell {
         lblPrice.text = "$ " + (data.orderTotalPrice ?? "0")
         if let url = data.service?.thumbnail
         {
-            imgViewService.setImage(with: url, placeholder: "image")
+            imgViewService.setImage(with: url, placeholder: KImages.kNoImage)
         }
     }
     //MARK:- Actions

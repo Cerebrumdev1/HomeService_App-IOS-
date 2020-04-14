@@ -514,5 +514,69 @@ extension UIViewController
         
         return randomString
     }
+    func intToDate(intval:Int) -> String
+    {
+        let timeInterval = Double(intval)
+        let myNSDate = Date(timeIntervalSince1970: timeInterval)
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.string(from: myNSDate)
+        return date
+    }
     
+    func get_transaction_failed_reason(dicnry:NSDictionary) -> String
+    {
+        let txt = "Payment Failed!"
+        let field1  = dicnry.value(forKey: "field1")as? String
+        let field2  = dicnry.value(forKey: "field2")as? String
+        let field3  = dicnry.value(forKey: "field3")as? String
+        let field4  = dicnry.value(forKey: "field4")as? String
+        let field5  = dicnry.value(forKey: "field5")as? String
+        let field6  = dicnry.value(forKey: "field6")as? String
+        let field7  = dicnry.value(forKey: "field7")as? String
+        let field8  = dicnry.value(forKey: "field8")as? String
+        let field9  = dicnry.value(forKey: "field9")as? String
+        
+        if (field1?.count ?? 0 > 0)
+        {
+           return field1 ?? txt
+        }
+        if (field2?.count ?? 0 > 0)
+        {
+            return field2 ?? txt
+        }
+        if (field3?.count ?? 0 > 0)
+        {
+            return field3 ?? txt
+        }
+        if (field4?.count ?? 0 > 0)
+        {
+            return field4 ?? txt
+        }
+        if (field5?.count ?? 0 > 0)
+        {
+            return field5 ?? txt
+        }
+        if (field6?.count ?? 0 > 0)
+        {
+            return field6 ?? txt
+        }
+        if (field7?.count ?? 0 > 0)
+        {
+            return field7 ?? txt
+        }
+        if (field8?.count ?? 0 > 0)
+        {
+            return field8 ?? txt
+        }
+        if (field9?.count ?? 0 > 0)
+        {
+            return field9 ?? txt
+        }
+        
+        return txt
+        
+        
+    }
 }
